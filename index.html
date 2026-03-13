@@ -3976,29 +3976,44 @@
       const messageField = document.querySelector('textarea[name="message"], textarea#message, .contact-form textarea, form textarea, #contact textarea');
       
       if (messageField) {
-        // Déterminer la date de sortie selon le jeu
-        const releaseDate = gameId === 'moh' ? 'été 2026' : 'printemps 2026';
-        const prefilledMessage = gameId === 'moh' 
-          ? `Je souhaite être informé(e) de la sortie du jeu "${gameName}" (${gameDesc}), prévu à l'été 2026.
+        // Déterminer le message en fonction du jeu
+        let prefilledMessage;
+        if (gameId === 'moh') {
+          prefilledMessage = `Bonjour,
 
-[Vous pouvez ajouter votre commentaire ou question ici]
+Je souhaite être informé(e) dès la sortie du jeu 
+Minhag ou Halakha (prévu été 2026).
 
-Merci !`
-          : `Bonjour,
+📌 Jeu : Minhag ou Halakha
+🎯 Objectif : Distinguer la loi religieuse de la coutume
+📅 Sortie prévue : Été 2026
 
-Je souhaite être informé(e) de la sortie du jeu "${gameName}" (${gameDesc}), prévue au ${releaseDate}.
-
-[Vous pouvez ajouter votre commentaire ou question ici]
+[Votre message ou question ici]
 
 Merci !`;
+        } else {
+          prefilledMessage = `Bonjour,
+
+Je souhaite être informé(e) dès la sortie du jeu 
+Jérusalem du Ciel (prévu hiver 2026).
+
+📌 Jeu : Jérusalem du Ciel
+🎯 Objectif : Traverser 3000 ans d'histoire juive en famille
+📅 Sortie prévue : Hiver 2026
+
+[Votre message ou question ici]
+
+Merci !`;
+        }
         
         messageField.value = prefilledMessage;
         
         setTimeout(() => {
           messageField.focus();
-          const startPos = prefilledMessage.indexOf('[Vous pouvez');
-          const endPos = prefilledMessage.indexOf('ici]') + 4;
-          if (startPos > -1 && endPos > startPos) {
+          const placeholder = '[Votre message ou question ici]';
+          const startPos = prefilledMessage.indexOf(placeholder);
+          const endPos = startPos + placeholder.length;
+          if (startPos > -1) {
             messageField.setSelectionRange(startPos, endPos);
           }
         }, 600);
@@ -4007,6 +4022,12 @@ Merci !`;
       // Ajouter champ caché pour Formspree
       const form = messageField ? messageField.closest('form') : document.querySelector('form[action*="formspree"], #contact form, .contact-form');
       if (form) {
+        // Pré-sélectionner \"Vous êtes\" sur Particulier si vide
+        const userTypeSelect = form.querySelector('#user-type, select[name=\"user_type\"]');
+        if (userTypeSelect && !userTypeSelect.value) {
+          userTypeSelect.value = 'particulier';
+        }
+
         let hiddenField = form.querySelector('input[name="jeu_interesse"]');
         if (!hiddenField) {
           hiddenField = document.createElement('input');

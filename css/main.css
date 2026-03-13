@@ -3966,6 +3966,14 @@ html body #hero-bis-poz .hero-bis-background img {
   min-height: 150px;
 }
 
+textarea#message, 
+textarea[name="message"],
+.contact-form textarea {
+  min-height: 220px;
+  height: 220px;
+  resize: vertical;
+}
+
 .form-group select {
   cursor: pointer;
   appearance: none;

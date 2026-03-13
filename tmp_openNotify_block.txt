@@ -1,0 +1,48 @@
+      // Trouver le textarea
+      const messageField = document.querySelector('textarea[name="message"], textarea#message, .contact-form textarea, form textarea, #contact textarea');
+      
+      if (messageField) {
+        // Déterminer le message en fonction du jeu
+        let prefilledMessage;
+        if (gameId === 'moh') {
+          prefilledMessage = `Bonjour,
+
+Je souhaite être informé(e) dès la sortie du jeu 
+Minhag ou Halakha (prévu été 2026).
+
+📌 Jeu : Minhag ou Halakha
+🎯 Objectif : Distinguer la loi religieuse de la coutume
+📅 Sortie prévue : Été 2026
+
+[Votre message ou question ici]
+
+Merci !`;
+        } else {
+          prefilledMessage = `Bonjour,
+
+Je souhaite être informé(e) dès la sortie du jeu 
+Jérusalem du Ciel (prévu hiver 2026).
+
+📌 Jeu : Jérusalem du Ciel
+🎯 Objectif : Traverser 3000 ans d'histoire juive en famille
+📅 Sortie prévue : Hiver 2026
+
+[Votre message ou question ici]
+
+Merci !`;
+        }
+        
+        messageField.value = prefilledMessage;
+        
+        setTimeout(() => {
+          messageField.focus();
+          const placeholder = '[Votre message ou question ici]';
+          const startPos = prefilledMessage.indexOf(placeholder);
+          const endPos = startPos + placeholder.length;
+          if (startPos > -1) {
+            messageField.setSelectionRange(startPos, endPos);
+          }
+        }, 600);
+      }
+
+
