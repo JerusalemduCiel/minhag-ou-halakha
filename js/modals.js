@@ -1,4 +1,3 @@
-try {
 /* ========================================
    SYSTÈME DE MODALES - VERSION SIMPLE
    ======================================== */
@@ -25,8 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initVerticalCarousels();
     
     console.log('✅ Système de modales initialisé');
-});
-
+    
 /* ========================================
    1. OUVERTURE DES MODALES
    ======================================== */
@@ -134,25 +132,19 @@ function initModalButtons() {
     });
     
     // Bouton "Store / Shop" - Scroll vers la boutique (modale prelaunch désactivée)
-    document.querySelectorAll('[data-action="store"], .btn-store').forEach(btn => {
+    document.querySelectorAll('[data-action="store"], .btn-store, .btn-modal.btn-store').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             // Scroll vers la boutique
-            const shopSection = document.getElementById('boutique') 
+            const target = document.getElementById('boutique') 
                 || document.getElementById('cta-final')
-                || document.getElementById('precommande');
+                || document.getElementById('precommande')
+                || document.querySelector('.cart-section');
             
-            if (shopSection) {
-                const header = document.getElementById('main-header');
-                const headerHeight = header ? header.offsetHeight : 0;
-                const targetPosition = shopSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
@@ -246,16 +238,14 @@ function initCloseHandlers() {
             }
         });
     });
+}
     
-}
-}
-
 /* ========================================
    4. MODALE DÉCOUVRIR LE CONTENU - NOUVEAU
    ======================================== */
 
 function initContentDiscoveryModal() {
-    console.log('🎯 Initialisation modale "Découvrir le contenu"');
+        console.log('🎯 Initialisation modale "Découvrir le contenu"');
     
     // Bouton de fermeture X
     document.querySelectorAll('.content-discovery-close').forEach(btn => {
@@ -293,10 +283,9 @@ function initContentDiscoveryModal() {
             e.stopPropagation();
         });
     });
-}
-
-function openContentDiscoveryModal(gameId) {
-    console.log('🎯 Ouverture modale découverte contenu:', gameId);
+    
+    function openContentDiscoveryModal(gameId) {
+        console.log('🎯 Ouverture modale découverte contenu:', gameId);
     
     const overlay = document.getElementById(`content-discovery-${gameId}`);
     if (!overlay) {
@@ -318,151 +307,156 @@ function openContentDiscoveryModal(gameId) {
     if (carousel) {
         resetVerticalCarousel(carousel);
     }
-}
-
-function closeContentDiscoveryModal(overlay) {
-    console.log('❌ Fermeture modale découverte contenu');
+    }
     
-    // Animation de fermeture
-    overlay.classList.remove('active');
-    
-    // Réactiver le scroll du body
-    document.body.style.overflow = '';
-    
-    // Masquer après l'animation
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 300);
-}
-
-/* ========================================
-   5. CARROUSEL VERTICAL
-   ======================================== */
-
-function initVerticalCarousels() {
-    console.log('🎯 Initialisation des carrousels verticaux');
-    
-    document.querySelectorAll('.vertical-carousel').forEach(carousel => {
-        const items = carousel.querySelectorAll('.vertical-carousel-item');
-        const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
-        const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
-        const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
+    function closeContentDiscoveryModal(overlay) {
+        console.log('❌ Fermeture modale découverte contenu');
         
-        if (!items.length) return;
+        // Animation de fermeture
+        overlay.classList.remove('active');
         
-        let currentIndex = 0;
+        // Réactiver le scroll du body
+        document.body.style.overflow = '';
         
-        function updateCarousel(index) {
-            // Désactiver tous les items et gérer les vidéos
-            items.forEach((item, i) => {
-                item.classList.remove('active');
-                if (indicators[i]) indicators[i].classList.remove('active');
-                
-                // Mettre en pause et réinitialiser les vidéos inactives
-                const video = item.querySelector('video');
-                if (video && i !== index) {
-                    video.pause();
-                    video.currentTime = 0;
-                }
-            });
+        // Masquer après l'animation
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 300);
+    }
+    
+    // Exposer les fonctions globalement
+    window.openContentDiscoveryModal = openContentDiscoveryModal;
+    window.closeContentDiscoveryModal = closeContentDiscoveryModal;
+    
+    /* ========================================
+       5. CARROUSEL VERTICAL
+       ======================================== */
+    
+    function initVerticalCarousels() {
+        console.log('🎯 Initialisation des carrousels verticaux');
+        
+        document.querySelectorAll('.vertical-carousel').forEach(carousel => {
+            const items = carousel.querySelectorAll('.vertical-carousel-item');
+            const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
+            const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
+            const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
             
-            // Activer l'item courant
-            const activeItem = items[index];
-            if (activeItem) {
-                activeItem.classList.add('active');
-                if (indicators[index]) indicators[index].classList.add('active');
+            if (!items.length) return;
+            
+            let currentIndex = 0;
+            
+            function updateCarousel(index) {
+                // Désactiver tous les items et gérer les vidéos
+                items.forEach((item, i) => {
+                    item.classList.remove('active');
+                    if (indicators[i]) indicators[i].classList.remove('active');
+                    
+                    // Mettre en pause et réinitialiser les vidéos inactives
+                    const video = item.querySelector('video');
+                    if (video && i !== index) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                });
                 
-                // Charger la vidéo si elle existe dans l'item actif
-                const activeVideo = activeItem.querySelector('video.carousel-video');
-                if (activeVideo) {
-                    activeVideo.load();
+                // Activer l'item courant
+                const activeItem = items[index];
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                    if (indicators[index]) indicators[index].classList.add('active');
+                    
+                    // Charger la vidéo si elle existe dans l'item actif
+                    const activeVideo = activeItem.querySelector('video.carousel-video');
+                    if (activeVideo) {
+                        activeVideo.load();
+                    }
                 }
+                
+                currentIndex = index;
+                
+                // Gérer les boutons disabled
+                if (prevBtn) prevBtn.disabled = index === 0;
+                if (nextBtn) nextBtn.disabled = index === items.length - 1;
             }
             
-            currentIndex = index;
+            // Bouton précédent
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (currentIndex > 0) {
+                        updateCarousel(currentIndex - 1);
+                    }
+                });
+            }
             
-            // Gérer les boutons disabled
-            if (prevBtn) prevBtn.disabled = index === 0;
-            if (nextBtn) nextBtn.disabled = index === items.length - 1;
-        }
-        
-        // Bouton précédent
-        if (prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (currentIndex > 0) {
-                    updateCarousel(currentIndex - 1);
-                }
+            // Bouton suivant
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (currentIndex < items.length - 1) {
+                        updateCarousel(currentIndex + 1);
+                    }
+                });
+            }
+            
+            // Indicateurs
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    updateCarousel(index);
+                });
             });
-        }
-        
-        // Bouton suivant
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (currentIndex < items.length - 1) {
-                    updateCarousel(currentIndex + 1);
-                }
-            });
-        }
-        
-        // Indicateurs
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', function(e) {
-                e.stopPropagation();
-                updateCarousel(index);
-            });
-        });
-        
-        // Initialiser
-        updateCarousel(0);
-        
-        // Observer les changements d'item actif pour les vidéos (sécurité supplémentaire)
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    items.forEach((item, i) => {
-                        const video = item.querySelector('video.carousel-video');
-                        if (video) {
-                            if (item.classList.contains('active')) {
-                                // Item devient actif : charger la vidéo
-                                video.load();
-                            } else {
-                                // Item devient inactif : arrêter et réinitialiser
-                                video.pause();
-                                video.currentTime = 0;
+            
+            // Initialiser
+            updateCarousel(0);
+            
+            // Observer les changements d'item actif pour les vidéos (sécurité supplémentaire)
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        items.forEach((item, i) => {
+                            const video = item.querySelector('video.carousel-video');
+                            if (video) {
+                                if (item.classList.contains('active')) {
+                                    // Item devient actif : charger la vidéo
+                                    video.load();
+                                } else {
+                                    // Item devient inactif : arrêter et réinitialiser
+                                    video.pause();
+                                    video.currentTime = 0;
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
+                });
+            });
+            
+            // Observer tous les items
+            items.forEach(item => {
+                observer.observe(item, { attributes: true, attributeFilter: ['class'] });
             });
         });
-        
-        // Observer tous les items
-        items.forEach(item => {
-            observer.observe(item, { attributes: true, attributeFilter: ['class'] });
-        });
-    });
+    }
 }
 
 function resetVerticalCarousel(carousel) {
-    const items = carousel.querySelectorAll('.vertical-carousel-item');
-    const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
-    const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
-    const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
+        const items = carousel.querySelectorAll('.vertical-carousel-item');
+        const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
+        const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
+        const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
+        
+        items.forEach((item, i) => {
+            item.classList.remove('active');
+            if (indicators[i]) indicators[i].classList.remove('active');
+        });
+        
+        if (items[0]) items[0].classList.add('active');
+        if (indicators[0]) indicators[0].classList.add('active');
+        
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = items.length <= 1;
+    }
     
-    items.forEach((item, i) => {
-        item.classList.remove('active');
-        if (indicators[i]) indicators[i].classList.remove('active');
-    });
-    
-    if (items[0]) items[0].classList.add('active');
-    if (indicators[0]) indicators[0].classList.add('active');
-    
-    if (prevBtn) prevBtn.disabled = true;
-    if (nextBtn) nextBtn.disabled = items.length <= 1;
-}
-
-} catch(e) {
-    alert('ERREUR modals.js : ' + e.message);
-}
+    // Exposer resetVerticalCarousel globalement
+    window.resetVerticalCarousel = resetVerticalCarousel;
+});

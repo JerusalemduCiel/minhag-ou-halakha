@@ -285,46 +285,55 @@
        ======================================== */
 
     function interceptGlobalFunctions() {
+        // DÉSACTIVÉ - Interception addToCart et proceedToCheckout
+        // Ces fonctions causaient des conflits "Cannot redefine property"
+        // Commenté pour éviter les erreurs
+        
+        /*
         // Intercepter addToCart (même si défini plus tard)
-        // Utiliser un Proxy pour intercepter les assignations futures
-        let addToCartOriginal = window.addToCart;
-        Object.defineProperty(window, 'addToCart', {
-            get: function() {
-                return function(...args) {
-                    handlePurchaseClick({ 
-                        preventDefault: () => {}, 
-                        stopPropagation: () => {}, 
-                        stopImmediatePropagation: () => {} 
-                    });
-                };
-            },
-            set: function(newValue) {
-                // Si une nouvelle fonction est assignée, on l'intercepte quand même
-                addToCartOriginal = newValue;
-            },
-            configurable: true,
-            enumerable: true
-        });
+        // Vérifier d'abord si addToCart existe déjà pour éviter les conflits
+        if (!window.addToCart) {
+            window.addToCart = function(...args) {
+                handlePurchaseClick({ 
+                    preventDefault: () => {}, 
+                    stopPropagation: () => {}, 
+                    stopImmediatePropagation: () => {} 
+                });
+            };
+        } else {
+            // Si addToCart existe déjà, sauvegarder l'original et le remplacer
+            const addToCartOriginal = window.addToCart;
+            window.addToCart = function(...args) {
+                handlePurchaseClick({ 
+                    preventDefault: () => {}, 
+                    stopPropagation: () => {}, 
+                    stopImmediatePropagation: () => {} 
+                });
+            };
+        }
 
         // Intercepter proceedToCheckout (même si défini plus tard)
-        let proceedToCheckoutOriginal = window.proceedToCheckout;
-        Object.defineProperty(window, 'proceedToCheckout', {
-            get: function() {
-                return function(...args) {
-                    handlePurchaseClick({ 
-                        preventDefault: () => {}, 
-                        stopPropagation: () => {}, 
-                        stopImmediatePropagation: () => {} 
-                    });
-                };
-            },
-            set: function(newValue) {
-                // Si une nouvelle fonction est assignée, on l'intercepte quand même
-                proceedToCheckoutOriginal = newValue;
-            },
-            configurable: true,
-            enumerable: true
-        });
+        // Vérifier d'abord si proceedToCheckout existe déjà pour éviter les conflits
+        if (!window.proceedToCheckout) {
+            window.proceedToCheckout = function(...args) {
+                handlePurchaseClick({ 
+                    preventDefault: () => {}, 
+                    stopPropagation: () => {}, 
+                    stopImmediatePropagation: () => {} 
+                });
+            };
+        } else {
+            // Si proceedToCheckout existe déjà, sauvegarder l'original et le remplacer
+            const proceedToCheckoutOriginal = window.proceedToCheckout;
+            window.proceedToCheckout = function(...args) {
+                handlePurchaseClick({ 
+                    preventDefault: () => {}, 
+                    stopPropagation: () => {}, 
+                    stopImmediatePropagation: () => {} 
+                });
+            };
+        }
+        */
     }
 
     /* ========================================

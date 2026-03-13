@@ -1,4 +1,3 @@
-try {
 /* ========================================
    ORA SHEL TORAH - SCRIPT PRINCIPAL
    ======================================== */
@@ -1696,7 +1695,3 @@ window.addEventListener('click', function(event) {
         document.body.style.overflow = 'auto';
     }
 });
-
-} catch(e) {
-    alert('ERREUR main.js : ' + e.message);
-}

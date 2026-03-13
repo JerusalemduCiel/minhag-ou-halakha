@@ -38,9 +38,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/main.css?v=20251120h">
+    <link rel="stylesheet" href="css/main.css?v=20260313">
     <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/responsive.css?v=20251120e">
+    <link rel="stylesheet" href="css/responsive.css?v=20260313">
     <link rel="stylesheet" href="css/prelaunch-popup.css">
     <link rel="stylesheet" href="css/certificates-modal.css">
     <link rel="stylesheet" href="css/rules-modal.css">
@@ -2853,11 +2853,11 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <!-- JavaScript -->
-    <script src="js/main.js?v=20251103a"></script>
-    <script src="js/modals.js?v=20251103a"></script>
-    <script src="js/animations.js?v=20251103a"></script>
-    <script src="js/gallery-config.js?v=20251103a"></script>
-    <script src="js/content-discovery-modals.js?v=20251103a"></script>
+    <script src="js/main.js?v=20260313"></script>
+    <script src="js/modals.js?v=20260313"></script>
+    <script src="js/animations.js?v=20260313"></script>
+    <script src="js/gallery-config.js?v=20260313"></script>
+    <script src="js/content-discovery-modals.js?v=20260313"></script>
     <script src="js/prelaunch-popup.js"></script>
     <script src="js/certificates-modal.js"></script>
     <script src="js/rules-modal.js"></script>
@@ -3417,7 +3417,27 @@
         const btnCloseModal = storyFull?.querySelector('.close-story');
         console.log('Bouton fermeture trouvé (.close-story) :', btnCloseModal);
         
-        // Test direct de fermeture
+        // Test direct de fermeture - Vérification avant utilisation
+        let closeStory = document.querySelector('.close-story');
+        if (closeStory) {
+            // Utiliser closeStory si trouvé globalement
+            if (!btnCloseModal && closeStory) {
+                closeStory.addEventListener('click', function(e) {
+                    console.log('CLIC SUR LA CROIX DÉTECTÉ !');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const modal = document.getElementById('story-full');
+                    if (modal) {
+                        console.log('Tentative de fermeture...');
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        console.log('Modale fermée !');
+                    }
+                });
+            }
+        }
+        
         if (btnCloseModal) {
             btnCloseModal.addEventListener('click', function(e) {
                 console.log('CLIC SUR LA CROIX DÉTECTÉ !');
@@ -3488,6 +3508,24 @@
         }
         
         // Fermeture via le bouton [X] - Utiliser la délégation d'événements
+        // Réutiliser la variable closeStory déjà déclarée plus haut (ligne 3421)
+        if (!closeStory) {
+            closeStory = document.querySelector('.close-story');
+        }
+        if (closeStory) {
+            // Vérifier que l'event listener n'est pas déjà ajouté
+            const hasListener = closeStory.getAttribute('data-listener-added');
+            if (!hasListener) {
+                closeStory.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeStoryModal();
+                    return;
+                });
+                closeStory.setAttribute('data-listener-added', 'true');
+            }
+        }
+        
         if (storyFull) {
             storyFull.addEventListener('click', function(e) {
                 // Si on clique sur le bouton de fermeture
@@ -3614,6 +3652,14 @@
         });
     </script>
 
+    <!-- MODALE PARCOURS - Mon parcours : de l'éloignement à la lumière -->
+    <div id="story-full" class="story-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 9999; overflow: hidden; padding: 0;">
+        <button class="close-story" aria-label="Fermer" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 2.5rem; color: #fff; cursor: pointer; line-height: 1; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: color 0.3s ease; z-index: 10000;">×</button>
+        <div class="story-modal" style="background: #ffffff !important; padding: 40px !important; border-radius: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important; max-width: 800px; width: 90%; max-height: calc(100vh - 150px); position: relative; overflow-y: auto; margin: 0 auto;">
+            <!-- Le contenu sera ajouté dynamiquement ou est déjà présent ailleurs -->
+        </div>
+    </div>
+
     <!-- ======================================== 
          BOUTON FLOTTANT "D'OÙ ÇA VIENT ?" + MODAL
          ======================================== -->
@@ -3626,7 +3672,7 @@
     </button>
 
     <!-- Script du bouton flottant - APRÈS le bouton HTML -->
-    <script src="js/genesis-button.js?v=20251103a"></script>
+    <script src="js/genesis-button.js?v=20260313"></script>
 
     <!-- Modal "La genèse du projet" -->
     <div id="genesis-modal-overlay" class="genesis-modal-overlay" aria-hidden="true">
