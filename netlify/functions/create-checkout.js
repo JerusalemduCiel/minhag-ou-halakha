@@ -1,30 +1,18 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-// Poids des produits (DOIT correspondre au frontend)
-const productWeights = {
-  'jdc': 2.8,
-  'moh': 0.7,
-  'poz': 0.6,
-  'pack': 4.0
-};
-
-// Grille Colissimo (DOIT correspondre au frontend)
-const colissimoRates = [
-  { maxWeight: 1.0, price: 7.50 },
-  { maxWeight: 2.0, price: 9.50 },
-  { maxWeight: 3.0, price: 12.00 },
-  { maxWeight: 5.0, price: 15.00 },
-  { maxWeight: 10.0, price: 20.00 },
-  { maxWeight: 30.0, price: 28.00 }
-];
+const Stripe = require('stripe');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
     'Content-Type': 'application/json'
   };
+
+  // PROBLÈME 1 - Accepter les requêtes GET pour éviter 405 en local
+  if (event.httpMethod === 'GET') {
+    return { statusCode: 200, headers, body: JSON.stringify({ message: 'OK' }) };
+  }
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
@@ -47,7 +35,7 @@ exports.handler = async (event) => {
     }
 
     // Vérifier que les produits demandés sont disponibles
-    const unavailableProducts = ['jdc', 'poz'];
+    const unavailableProducts = [];
     const priceMap = {
       'price_1SBf5wL4ecjfMIxOm0nbZ5sp': 'jdc',
       'price_1SBf6vL4ecjfMIxOYXAbWfh8': 'moh',
@@ -67,28 +55,15 @@ exports.handler = async (event) => {
       };
     }
 
-    // Mapping priceId → productId
-    const priceMap = {
-      'price_1SBf5wL4ecjfMIxOm0nbZ5sp': 'jdc',
-      'price_1SBf6vL4ecjfMIxOYXAbWfh8': 'moh',
-      'price_1SBf7lL4ecjfMIxOKuRj4czs': 'poz'
-    };
+    // Calculer poids total estimé (pour metadata uniquement)
+    // Estimation simple : ~1 kg par article
+    const totalItems = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const totalWeight = totalItems * 1.0;
 
-    // Calculer poids total
-    const totalWeight = items.reduce((sum, item) => {
-      const productId = priceMap[item.priceId];
-      const weight = productWeights[productId] || 0;
-      return sum + (weight * (item.quantity || 1));
-    }, 0);
-
-    // Trouver tarif Colissimo
-    let shippingCost = 35.00; // Par défaut si > 30kg
-    for (let rate of colissimoRates) {
-      if (totalWeight <= rate.maxWeight) {
-        shippingCost = rate.price;
-        break;
-      }
-    }
+    // PROBLÈME 2 - Frais de port simplifiés :
+    // - 1 article : 4,90€
+    // - 2 articles ou plus : GRATUIT
+    const shippingCost = totalItems === 1 ? 4.90 : 0;
 
     // Line items Stripe
     const lineItems = items.map(item => ({
@@ -96,18 +71,20 @@ exports.handler = async (event) => {
       quantity: item.quantity || 1
     }));
 
-    // Ajouter frais de port
-    lineItems.push({
-      price_data: {
-        currency: 'eur',
-        product_data: {
-          name: 'Frais de port Colissimo',
-          description: `Colis ${totalWeight.toFixed(1)} kg`
+    // Ajouter frais de port uniquement si > 0
+    if (shippingCost > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Frais de port Colissimo',
+            description: `Colis ${totalWeight.toFixed(1)} kg`
+          },
+          unit_amount: Math.round(shippingCost * 100)
         },
-        unit_amount: Math.round(shippingCost * 100)
-      },
-      quantity: 1
-    });
+        quantity: 1
+      });
+    }
 
     // Créer session Stripe
     const session = await stripe.checkout.sessions.create({

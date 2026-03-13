@@ -25,6 +25,138 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Système de modales initialisé');
     
+    /* ========================================
+       5. CARROUSEL VERTICAL
+       ======================================== */
+    
+    function initVerticalCarousels() {
+        console.log('🎯 Initialisation des carrousels verticaux');
+        
+        document.querySelectorAll('.vertical-carousel').forEach(carousel => {
+            const items = carousel.querySelectorAll('.vertical-carousel-item');
+            const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
+            const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
+            const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
+            
+            if (!items.length) return;
+            
+            let currentIndex = 0;
+            
+            function updateCarousel(index) {
+                // Désactiver tous les items et gérer les vidéos
+                items.forEach((item, i) => {
+                    item.classList.remove('active');
+                    if (indicators[i]) indicators[i].classList.remove('active');
+                    
+                    // Mettre en pause et réinitialiser les vidéos inactives
+                    const video = item.querySelector('video');
+                    if (video && i !== index) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                });
+                
+                // Activer l'item courant
+                const activeItem = items[index];
+                if (activeItem) {
+                    activeItem.classList.add('active');
+                    if (indicators[index]) indicators[index].classList.add('active');
+                    
+                    // Charger la vidéo si elle existe dans l'item actif
+                    const activeVideo = activeItem.querySelector('video.carousel-video');
+                    if (activeVideo) {
+                        activeVideo.load();
+                    }
+                }
+                
+                currentIndex = index;
+                
+                // Gérer les boutons disabled
+                if (prevBtn) prevBtn.disabled = index === 0;
+                if (nextBtn) nextBtn.disabled = index === items.length - 1;
+            }
+            
+            // Bouton précédent
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (currentIndex > 0) {
+                        updateCarousel(currentIndex - 1);
+                    }
+                });
+            }
+            
+            // Bouton suivant
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (currentIndex < items.length - 1) {
+                        updateCarousel(currentIndex + 1);
+                    }
+                });
+            }
+            
+            // Indicateurs
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    updateCarousel(index);
+                });
+            });
+            
+            // Initialiser
+            updateCarousel(0);
+            
+            // Observer les changements d'item actif pour les vidéos (sécurité supplémentaire)
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        items.forEach((item, i) => {
+                            const video = item.querySelector('video.carousel-video');
+                            if (video) {
+                                if (item.classList.contains('active')) {
+                                    // Item devient actif : charger la vidéo
+                                    video.load();
+                                } else {
+                                    // Item devient inactif : arrêter et réinitialiser
+                                    video.pause();
+                                    video.currentTime = 0;
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Observer tous les items
+            items.forEach(item => {
+                observer.observe(item, { attributes: true, attributeFilter: ['class'] });
+            });
+        });
+    }
+    
+    function resetVerticalCarousel(carousel) {
+        const items = carousel.querySelectorAll('.vertical-carousel-item');
+        const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
+        const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
+        const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
+        
+        items.forEach((item, i) => {
+            item.classList.remove('active');
+            if (indicators[i]) indicators[i].classList.remove('active');
+        });
+        
+        if (items[0]) items[0].classList.add('active');
+        if (indicators[0]) indicators[0].classList.add('active');
+        
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = items.length <= 1;
+    }
+    
+    // Exposer les fonctions globalement
+    window.initVerticalCarousels = initVerticalCarousels;
+    window.resetVerticalCarousel = resetVerticalCarousel;
+    
 /* ========================================
    1. OUVERTURE DES MODALES
    ======================================== */
@@ -327,136 +459,5 @@ function initContentDiscoveryModal() {
     // Exposer les fonctions globalement
     window.openContentDiscoveryModal = openContentDiscoveryModal;
     window.closeContentDiscoveryModal = closeContentDiscoveryModal;
-    
-    /* ========================================
-       5. CARROUSEL VERTICAL
-       ======================================== */
-    
-    function initVerticalCarousels() {
-        console.log('🎯 Initialisation des carrousels verticaux');
-        
-        document.querySelectorAll('.vertical-carousel').forEach(carousel => {
-            const items = carousel.querySelectorAll('.vertical-carousel-item');
-            const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
-            const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
-            const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
-            
-            if (!items.length) return;
-            
-            let currentIndex = 0;
-            
-            function updateCarousel(index) {
-                // Désactiver tous les items et gérer les vidéos
-                items.forEach((item, i) => {
-                    item.classList.remove('active');
-                    if (indicators[i]) indicators[i].classList.remove('active');
-                    
-                    // Mettre en pause et réinitialiser les vidéos inactives
-                    const video = item.querySelector('video');
-                    if (video && i !== index) {
-                        video.pause();
-                        video.currentTime = 0;
-                    }
-                });
-                
-                // Activer l'item courant
-                const activeItem = items[index];
-                if (activeItem) {
-                    activeItem.classList.add('active');
-                    if (indicators[index]) indicators[index].classList.add('active');
-                    
-                    // Charger la vidéo si elle existe dans l'item actif
-                    const activeVideo = activeItem.querySelector('video.carousel-video');
-                    if (activeVideo) {
-                        activeVideo.load();
-                    }
-                }
-                
-                currentIndex = index;
-                
-                // Gérer les boutons disabled
-                if (prevBtn) prevBtn.disabled = index === 0;
-                if (nextBtn) nextBtn.disabled = index === items.length - 1;
-            }
-            
-            // Bouton précédent
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (currentIndex > 0) {
-                        updateCarousel(currentIndex - 1);
-                    }
-                });
-            }
-            
-            // Bouton suivant
-            if (nextBtn) {
-                nextBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (currentIndex < items.length - 1) {
-                        updateCarousel(currentIndex + 1);
-                    }
-                });
-            }
-            
-            // Indicateurs
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    updateCarousel(index);
-                });
-            });
-            
-            // Initialiser
-            updateCarousel(0);
-            
-            // Observer les changements d'item actif pour les vidéos (sécurité supplémentaire)
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.attributeName === 'class') {
-                        items.forEach((item, i) => {
-                            const video = item.querySelector('video.carousel-video');
-                            if (video) {
-                                if (item.classList.contains('active')) {
-                                    // Item devient actif : charger la vidéo
-                                    video.load();
-                                } else {
-                                    // Item devient inactif : arrêter et réinitialiser
-                                    video.pause();
-                                    video.currentTime = 0;
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-            
-            // Observer tous les items
-            items.forEach(item => {
-                observer.observe(item, { attributes: true, attributeFilter: ['class'] });
-            });
-        });
-    }
 }
-
-function resetVerticalCarousel(carousel) {
-        const items = carousel.querySelectorAll('.vertical-carousel-item');
-        const indicators = carousel.querySelectorAll('.vertical-carousel-indicator');
-        const prevBtn = carousel.querySelector('.vertical-carousel-nav.prev');
-        const nextBtn = carousel.querySelector('.vertical-carousel-nav.next');
-        
-        items.forEach((item, i) => {
-            item.classList.remove('active');
-            if (indicators[i]) indicators[i].classList.remove('active');
-        });
-        
-        if (items[0]) items[0].classList.add('active');
-        if (indicators[0]) indicators[0].classList.add('active');
-        
-        if (prevBtn) prevBtn.disabled = true;
-        if (nextBtn) nextBtn.disabled = items.length <= 1;
-    }
-    
-    // Exposer resetVerticalCarousel globalement
-    window.resetVerticalCarousel = resetVerticalCarousel;
 });

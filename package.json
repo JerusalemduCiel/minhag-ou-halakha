@@ -6,8 +6,6 @@
     "build": "echo 'Build complete'"
   },
   "dependencies": {
-    "stripe": "^14.0.0"
+    "stripe": "^14.25.0"
   }
 }
-
-
