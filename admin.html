@@ -374,17 +374,17 @@
         doc.text('DESTINATAIRE', 10, 58);
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
-        doc.text(destName || 'Destinataire', 10, 66);
+        doc.text(destName || 'Destinataire', 10, 68);
         doc.setFontSize(12);
         doc.setFont(undefined, 'normal');
-        y = 74;
+        y = 75;
         if (destAddress) {
           doc.text(destAddress, 10, y);
-          y += 6;
+          y += 7;
         }
         if (destPostalCity) {
           doc.text(destPostalCity, 10, y);
-          y += 6;
+          y += 7;
         }
         doc.text('France', 10, y);
 
