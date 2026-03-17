@@ -1,4 +1,5 @@
 const Stripe = require('stripe');
+const { getStore } = require('@netlify/blobs');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 async function sendEmail(to, subject, htmlContent) {
@@ -43,6 +44,25 @@ exports.handler = async (event) => {
   ${session.metadata?.customer_zip || ''}`.trim();
     const amount = (session.amount_total / 100).toFixed(2);
     const sessionId = session.id;
+
+    // SAUVEGARDER LA COMMANDE DANS NETLIFY BLOBS
+    const store = getStore('commandes');
+    const commande = {
+      id: sessionId,
+      date: new Date().toISOString(),
+      status: 'nouvelle',
+      client: {
+        name: customerName,
+        email: customerEmail,
+        phone: customerPhone,
+        address: adresse
+      },
+      amount: amount,
+      product: session.metadata?.product_name || 'La Parole Transmise',
+      tracking: null
+    };
+    await store.setJSON(sessionId, commande);
+    console.log('Commande sauvegardée:', sessionId);
 
     // EMAIL CLIENT
     console.log('Envoi email client à:', customerEmail);
