@@ -1849,6 +1849,22 @@ img {
   max-height: 280px !important;
 }
 
+#acte-2 .jeu-visual {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 280px !important;
+  overflow: hidden !important;
+}
+
+#acte-2 .jeu-frame {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 280px !important;
+}
+
 /* Showcase / Acte 2 - images des 3 cartes à hauteur fixe */
 .showcase .product-card img,
 .showcase-grid .product-card img,
