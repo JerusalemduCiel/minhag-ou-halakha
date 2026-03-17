@@ -60,10 +60,8 @@ exports.handler = async (event) => {
     const totalItems = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
     const totalWeight = totalItems * 1.0;
 
-    // PROBLÈME 2 - Frais de port simplifiés :
-    // - 1 article : 4,90€
-    // - 2 articles ou plus : GRATUIT
-    const shippingCost = totalItems === 1 ? 4.90 : 0;
+    // Frais de port fixes Colissimo
+    const shippingCost = 7.59;
 
     // Line items Stripe
     const lineItems = items.map(item => ({
@@ -71,20 +69,15 @@ exports.handler = async (event) => {
       quantity: item.quantity || 1
     }));
 
-    // Ajouter frais de port uniquement si > 0
-    if (shippingCost > 0) {
-      lineItems.push({
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: 'Frais de port Colissimo',
-            description: `Colis ${totalWeight.toFixed(1)} kg`
-          },
-          unit_amount: Math.round(shippingCost * 100)
-        },
-        quantity: 1
-      });
-    }
+    // Ajouter systématiquement les frais de port
+    lineItems.push({
+      price_data: {
+        currency: 'eur',
+        product_data: { name: 'Livraison Colissimo' },
+        unit_amount: 759
+      },
+      quantity: 1
+    });
 
     // Créer session Stripe
     const session = await stripe.checkout.sessions.create({

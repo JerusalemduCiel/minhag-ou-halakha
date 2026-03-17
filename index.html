@@ -2923,9 +2923,8 @@
     };
     
     function calculateShipping(cart) {
-        const totalQty = cart.reduce((s, i) => s + (i.quantity || 1), 0);
-        const price = totalQty >= 2 ? 0 : 4.90;
-        const label = totalQty >= 2 ? 'Offerts 🎁' : '4,90 € (Colissimo)';
+        const price = 7.59;
+        const label = 'Livraison Colissimo : 7,59 €';
         return { price, label, weight: 0 };
     }
     

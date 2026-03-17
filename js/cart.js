@@ -70,8 +70,7 @@ function updateCartDisplay() {
 // Mettre à jour le total
 function updateCartTotal() {
     const subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
-    const totalQty = cart.reduce((s, i) => s + (i.quantity || 1), 0);
-    const shippingCost = totalQty >= 2 ? 0 : 4.90;
+    const shippingCost = 7.59;
     const total = subtotal + shippingCost;
     
     const subtotalEl = document.querySelector('.subtotal-amount');
@@ -85,7 +84,7 @@ function updateCartTotal() {
             shippingRow.style.display = '';
         }
         shippingEl.style.display = '';
-        shippingEl.textContent = shippingCost === 0 ? 'Offerts 🎁' : '4,90 € (Colissimo)';
+        shippingEl.textContent = 'Livraison Colissimo : 7,59 €';
     }
     
     if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
