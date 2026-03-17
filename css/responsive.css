@@ -487,9 +487,9 @@ img {
     
     .jeu-visual img,
     .jeu-frame img {
-    width: 100% !important;
-        max-width: 220px !important;
-    height: auto !important;
+        width: 100% !important;
+        height: 280px !important;
+        max-width: 100% !important;
         display: block !important;
     margin: 0 auto !important;
         border-radius: 8px !important;
