@@ -342,7 +342,8 @@
 
         const destName = urlName || document.getElementById('client-name').value.trim();
         const destAddress = urlAddress || '';
-        const destPostalCity = (urlPostal + ' ' + urlCity).trim();
+        const destPostal = urlPostal || '';
+        const destCity = urlCity || '';
 
         const { jsPDF } = window.jspdf || {};
         if (!jsPDF) {
@@ -375,28 +376,31 @@
         doc.rect(8, 52, 89, 60);
         doc.setFontSize(12);
         doc.text('DESTINATAIRE', 10, 58);
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text(destName || 'Destinataire', 10, 68);
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'normal');
-        y = 75;
-        if (destAddress) {
-          doc.text(destAddress, 10, y);
-          y += 7;
-        }
-        if (destPostalCity) {
-          doc.text(destPostalCity, 10, y);
-          y += 7;
-        }
-        doc.text('France', 10, y);
+        let yDest = 70;
+        const name = destName || 'Destinataire';
+        const address = destAddress || '';
+        const postal = destPostal || '';
+        const city = destCity || '';
 
-        // Produit / poids
-        y += 10;
-        doc.setFontSize(12);
-        doc.text('Produit : La Parole Transmise — Lumières d\'Israël', 10, y);
-        y += 6;
-        doc.text('Poids : 0,5 kg', 10, y);
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.text(name, 20, yDest);
+        yDest += 8;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(11);
+        if (address) {
+          doc.text(address, 20, yDest);
+          yDest += 7;
+        }
+        if (postal || city) {
+          doc.text((postal + ' ' + city).trim(), 20, yDest);
+          yDest += 7;
+        }
+        doc.text('France', 20, yDest);
+        yDest += 10;
+        doc.text('Produit : La Parole Transmise — Lumières d\'Israël', 20, yDest);
+        yDest += 7;
+        doc.text('Poids : 0,5 kg', 20, yDest);
 
         // Mention livraison
         doc.setFontSize(12);
