@@ -70,35 +70,31 @@ function updateCartDisplay() {
 // Mettre à jour le total
 function updateCartTotal() {
     const subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
-    // Total = subtotal uniquement (frais de port calculés par Stripe)
-    const total = subtotal;
+    const totalQty = cart.reduce((s, i) => s + (i.quantity || 1), 0);
+    const shippingCost = totalQty >= 2 ? 0 : 4.90;
+    const total = subtotal + shippingCost;
     
     const subtotalEl = document.querySelector('.subtotal-amount');
     const shippingEl = document.querySelector('.shipping-amount');
     const totalEl = document.querySelector('.total-amount');
     
-    // Masquer la ligne frais de port si elle existe
+    // Afficher la ligne frais de port
     if (shippingEl) {
         const shippingRow = shippingEl.closest('.shipping-row, .summary-line');
         if (shippingRow) {
-            shippingRow.style.display = 'none';
-        } else {
-            shippingEl.style.display = 'none';
+            shippingRow.style.display = '';
         }
+        shippingEl.style.display = '';
+        shippingEl.textContent = shippingCost === 0 ? 'Offerts 🎁' : '4,90 € (Colissimo)';
     }
     
     if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
     if (totalEl) {
         totalEl.textContent = formatPrice(total);
         
-        // Ajouter la mention discrète sous le total si elle n'existe pas déjà
-        if (!document.querySelector('.shipping-notice')) {
-            const notice = document.createElement('p');
-            notice.className = 'shipping-notice';
-            notice.style.cssText = 'font-size:0.8rem; color:#888; text-align:center; margin:5px 0';
-            notice.textContent = '🚚 Frais de port calculés à la commande';
-            totalEl.parentElement.appendChild(notice);
-        }
+        // Supprimer l'ancienne mention "Frais de port calculés à la commande"
+        const notice = document.querySelector('.shipping-notice');
+        if (notice) notice.remove();
     }
 }
 

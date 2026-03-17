@@ -2925,33 +2925,11 @@
         'pack': 4.0    // Pack complet
     };
     
-    // Grille tarifaire Colissimo France 2025
-    const colissimoRates = [
-        { maxWeight: 1.0, price: 7.50, label: "Colissimo 0-1kg" },
-        { maxWeight: 2.0, price: 9.50, label: "Colissimo 1-2kg" },
-        { maxWeight: 3.0, price: 12.00, label: "Colissimo 2-3kg" },
-        { maxWeight: 5.0, price: 15.00, label: "Colissimo 3-5kg" },
-        { maxWeight: 10.0, price: 20.00, label: "Colissimo 5-10kg" },
-        { maxWeight: 30.0, price: 28.00, label: "Colissimo 10-30kg" }
-    ];
-    
-    // Fonction pour calculer les frais de port Colissimo
     function calculateShipping(cart) {
-        // Calculer le poids total
-        const totalWeight = cart.reduce((sum, item) => {
-            const weight = productWeights[item.id] || 0;
-            return sum + (weight * item.quantity);
-        }, 0);
-        
-        // Trouver le tarif Colissimo correspondant
-        for (let rate of colissimoRates) {
-            if (totalWeight <= rate.maxWeight) {
-                return { price: rate.price, weight: totalWeight, label: rate.label };
-            }
-        }
-        
-        // Si > 30kg, contacter pour devis
-        return { price: 35.00, weight: totalWeight, label: "Sur devis" };
+        const totalQty = cart.reduce((s, i) => s + (i.quantity || 1), 0);
+        const price = totalQty >= 2 ? 0 : 4.90;
+        const label = totalQty >= 2 ? 'Offerts 🎁' : '4,90 € (Colissimo)';
+        return { price, label, weight: 0 };
     }
     
     // Charger le panier depuis localStorage
@@ -3224,7 +3202,7 @@
         
         if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
         if (shippingEl) {
-            shippingEl.textContent = `${formatPrice(shippingInfo.price)} (Colissimo ${shippingInfo.weight.toFixed(1)}kg)`;
+            shippingEl.textContent = shippingInfo.label;
         }
         if (totalEl) totalEl.textContent = formatPrice(total);
     }
