@@ -44,6 +44,11 @@ exports.handler = async (event) => {
     const amount = (session.amount_total / 100).toFixed(2);
     const sessionId = session.id;
 
+    if (session.metadata && typeof session.metadata.estimated_delivery === 'string' &&
+      session.metadata.estimated_delivery.toLowerCase().includes('avril-mai-2026')) {
+      session.metadata.estimated_delivery = '2-3 jours ouvrés';
+    }
+
     // EMAIL CLIENT
     console.log('Envoi email client à:', customerEmail);
     const clientResult = await sendEmail(
@@ -53,7 +58,7 @@ exports.handler = async (event) => {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #eda234;">Merci pour votre commande, ${customerName} !</h2>
         <p>Votre paiement de <strong>${amount} €</strong> a bien été reçu.</p>
-        <p>📦 <strong>Livraison prévue :</strong> Avril - Mai 2026</p>
+        <p>📦 <strong>Livraison prévue :</strong> 2 à 3 jours ouvrés après expédition (Colissimo)</p>
         <p>📍 <strong>Adresse de livraison :</strong> ${adresse}</p>
         <p>📧 Vous recevrez un second email avec votre numéro de suivi Colissimo dès l'expédition.</p>
         <hr/>
