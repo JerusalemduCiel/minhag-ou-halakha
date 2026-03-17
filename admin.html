@@ -401,7 +401,7 @@
       }
     });
 
-    // Génération étiquette colis (PDF A6) avec jsPDF
+    // Génération étiquette colis (PDF A5 paysage) avec jsPDF
     const btnGenerateLabel = document.getElementById('btn-generate-label');
     btnGenerateLabel.addEventListener('click', function() {
       try {
@@ -422,61 +422,44 @@
           return;
         }
 
-        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a6' });
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
 
-        // Expéditeur
-        doc.setLineWidth(0.4);
-        doc.rect(8, 8, 89, 40);
-        doc.setFontSize(12);
-        doc.text('EXPÉDITEUR', 10, 14);
-        doc.setFontSize(11);
-        const senderLines = [
-          'Ora Shel Torah',
-          'Michael Lumbroso',
-          '27 Boulevard des Belges',
-          '69006 LYON',
-          'France'
-        ];
-        let y = 20;
-        senderLines.forEach(line => {
-          doc.text(line, 10, y);
-          y += 5;
-        });
+        // BLOC GAUCHE (expéditeur) — x=10, y=15, largeur 85mm
+        doc.setFontSize(8);
+        doc.text('EXPÉDITEUR', 10, 15);
+        doc.rect(10, 18, 85, 35);
+        doc.setFontSize(9);
+        doc.text('Ora Shel Torah', 13, 25);
+        doc.text('Michael Lumbroso', 13, 30);
+        doc.text('27 Boulevard des Belges', 13, 35);
+        doc.text('69006 LYON', 13, 40);
+        doc.text('France', 13, 45);
 
-        // Destinataire
-        doc.rect(8, 52, 89, 60);
-        doc.setFontSize(12);
-        doc.text('DESTINATAIRE', 10, 58);
-        let yDest = 70;
+        // BLOC DROIT (destinataire) — x=115, y=15, largeur 85mm
         const name = destName || 'Destinataire';
         const address = destAddress || '';
         const postal = destPostal || '';
         const city = destCity || '';
 
-        doc.setFont(undefined, 'bold');
-        doc.setFontSize(14);
-        doc.text(name, 20, yDest);
-        yDest += 8;
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(11);
-        if (address) {
-          doc.text(address, 20, yDest);
-          yDest += 7;
-        }
-        if (postal || city) {
-          doc.text((postal + ' ' + city).trim(), 20, yDest);
-          yDest += 7;
-        }
-        doc.text('France', 20, yDest);
-        yDest += 10;
-        doc.text('Produit : La Parole Transmise — Lumières d\'Israël', 20, yDest);
-        yDest += 7;
-        doc.text('Poids : 0,5 kg', 20, yDest);
-
-        // Mention livraison
+        doc.setFontSize(8);
+        doc.text('DESTINATAIRE', 115, 15);
+        doc.setLineWidth(0.5);
+        doc.rect(115, 18, 85, 50);
         doc.setFontSize(12);
         doc.setFont(undefined, 'bold');
-        doc.text('LIVRAISON EN BOÎTE AUX LETTRES', 10, 140);
+        doc.text(name, 118, 28);
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        doc.text(address, 118, 36);
+        doc.text(postal + ' ' + city, 118, 43);
+        doc.text('France', 118, 50);
+
+        // BAS DE PAGE — centré
+        doc.setFontSize(9);
+        doc.text('Produit : La Parole Transmise — Lumières d\'Israël | Poids : 0,5 kg', 105, 85, { align: 'center' });
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text('LIVRAISON EN BOÎTE AUX LETTRES', 105, 95, { align: 'center' });
 
         doc.save('etiquette-colis-laposte.pdf');
       } catch (e) {
