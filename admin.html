@@ -213,11 +213,6 @@
       <button type="button" class="btn-logout" id="btn-logout">Déconnexion</button>
     </div>
 
-    <div id="orders-summary" style="margin-bottom: 30px;">
-      <h2>📦 Commandes <span id="badge-nouvelles" style="background:#e74c3c; color:white; padding:4px 12px; border-radius:20px; font-size:14px;">0</span></h2>
-      <div id="orders-list" style="margin-top:15px;">Chargement...</div>
-    </div>
-
     <div style="display:flex; gap:12px; margin-bottom:24px;">
       <div>
         <a href="https://www.laposte.fr/colissimo-en-ligne" target="_blank" style="background:#eda234; color:#0f1419; padding:10px 16px; border-radius:6px; text-decoration:none; font-weight:bold;">📮 Créer un bordereau Colissimo</a>
@@ -312,75 +307,10 @@
           banner.innerHTML = '✅ Commande chargée automatiquement depuis l\'email de confirmation.';
           document.getElementById('dashboard').prepend(banner);
         }
-        loadOrders();
       } else {
         loginError.classList.add('visible');
       }
     }
-
-    async function loadOrders() {
-      try {
-        const res = await fetch('/.netlify/functions/get-orders');
-        const commandes = await res.json();
-
-        const nouvelles = commandes.filter(c => c.status === 'nouvelle');
-        const expediees = commandes.filter(c => c.status === 'expediee');
-
-        document.getElementById('badge-nouvelles').textContent = nouvelles.length;
-
-        let html = '';
-
-        if (nouvelles.length > 0) {
-          html += '<h3 style="color:#e74c3c;">🔴 En attente (' + nouvelles.length + ')</h3>';
-          nouvelles.forEach(c => {
-            html += orderCard(c, '#fff3cd');
-          });
-        }
-
-        if (expediees.length > 0) {
-          html += '<h3 style="color:#27ae60; margin-top:20px;">🟢 Expédiées (' + expediees.length + ')</h3>';
-          expediees.forEach(c => {
-            html += orderCard(c, '#d4edda');
-          });
-        }
-
-        if (commandes.length === 0) {
-          html = '<p>Aucune commande pour le moment.</p>';
-        }
-
-        document.getElementById('orders-list').innerHTML = html;
-      } catch (err) {
-        document.getElementById('orders-list').innerHTML = '<p style="color:red;">Erreur chargement: ' + err.message + '</p>';
-      }
-    }
-
-    function orderCard(c, bgColor) {
-      const date = new Date(c.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      return '<div style="background:' + bgColor + '; border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:10px; cursor:pointer;" onclick="selectOrder(\'' + c.id + '\')">' +
-        '<strong>' + c.client.name + '</strong> — ' + c.amount + ' € — ' + date +
-        (c.tracking ? ' — 📦 ' + c.tracking : '') +
-        '<br><small>' + (c.client.address || '') + '</small>' +
-        '</div>';
-    }
-
-    function selectOrder(id) {
-      fetch('/.netlify/functions/get-orders')
-        .then(r => r.json())
-        .then(commandes => {
-          const c = commandes.find(cmd => cmd.id === id);
-          if (c) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('name', c.client.name);
-            params.set('email', c.client.email);
-            params.set('phone', c.client.phone || '');
-            params.set('address', c.client.address || '');
-            params.set('session', c.id);
-            params.set('product', c.product || '');
-            window.location.search = params.toString();
-          }
-        });
-    }
-    window.selectOrder = selectOrder;
 
     loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
