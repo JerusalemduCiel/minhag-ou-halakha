@@ -196,9 +196,12 @@
   <div id="login-page">
     <div class="login-logo">Ora Shel Torah</div>
     <div class="login-box">
-      <label for="admin-password">Mot de passe</label>
-      <input type="password" id="admin-password" placeholder="Mot de passe admin" autocomplete="current-password">
-      <button type="button" class="btn-login" id="btn-login">Connexion</button>
+      <form id="login-form" method="post" action="">
+        <input type="text" name="username" autocomplete="username" value="admin" style="display:none;">
+        <label for="admin-password">Mot de passe</label>
+        <input type="password" name="password" id="admin-password" autocomplete="current-password" placeholder="Mot de passe" required>
+        <button type="submit" class="btn-login" id="btn-login">Connexion</button>
+      </form>
       <p class="login-error" id="login-error">Mot de passe incorrect.</p>
     </div>
   </div>
@@ -269,7 +272,7 @@
     const loginPage = document.getElementById('login-page');
     const dashboard = document.getElementById('dashboard');
     const passwordInput = document.getElementById('admin-password');
-    const btnLogin = document.getElementById('btn-login');
+    const loginForm = document.getElementById('login-form');
     const loginError = document.getElementById('login-error');
     const btnLogout = document.getElementById('btn-logout');
     const trackingForm = document.getElementById('tracking-form');
@@ -308,9 +311,9 @@
         loginError.classList.add('visible');
       }
     }
-    btnLogin.addEventListener('click', doLogin);
-    passwordInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') doLogin();
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      doLogin();
     });
 
     // Lien suivi Colissimo dynamique
