@@ -253,8 +253,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="tracking">Numéro de suivi Colissimo</label>
-        <input type="text" id="tracking" name="tracking" placeholder="8X12345678901" required>
+        <label for="tracking-number">Numéro de suivi Colissimo</label>
+        <input type="text" id="tracking-number" name="tracking" placeholder="8X12345678901" required>
         <div id="tracking-link-preview" style="margin-top:8px; display:none;">
           <a id="tracking-link" href="" target="_blank" style="color:#eda234;">🔗 Voir le suivi sur laposte.fr</a>
         </div>
@@ -318,7 +318,7 @@
     });
 
     // Lien suivi Colissimo dynamique
-    const trackingInput = document.getElementById('tracking');
+    const trackingInput = document.getElementById('tracking-number');
     trackingInput.addEventListener('input', function() {
       const num = this.value.trim();
       const preview = document.getElementById('tracking-link-preview');
@@ -417,15 +417,14 @@
     });
 
     async function sendTracking() {
-      const params = new URLSearchParams(window.location.search);
-      const email = document.querySelector('[name="email"]')?.value || params.get('email');
-      const name = document.querySelector('[name="name"]')?.value || params.get('name');
-      const tracking = document.getElementById('tracking-number')?.value || document.querySelector('[placeholder*="Colissimo"]')?.value;
-
+      const tracking = document.getElementById('tracking-number').value.trim();
       if (!tracking) {
         alert('Veuillez entrer un numéro de suivi Colissimo');
         return;
       }
+      const params = new URLSearchParams(window.location.search);
+      const email = document.querySelector('[name="email"]')?.value || params.get('email');
+      const name = document.querySelector('[name="name"]')?.value || params.get('name');
 
       try {
         const res = await fetch('/.netlify/functions/send-tracking', {
@@ -465,7 +464,7 @@
         clientName: document.getElementById('client-name').value.trim(),
         clientEmail: document.getElementById('client-email').value.trim(),
         product: document.getElementById('product').value.trim(),
-        tracking: document.getElementById('tracking').value.trim()
+        tracking: document.getElementById('tracking-number').value.trim()
       };
 
       try {
