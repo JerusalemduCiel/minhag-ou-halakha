@@ -7432,6 +7432,16 @@ footer {
   padding: 20px;
 }
 
+/* Forçage global de la hauteur des images produits en boutique */
+.boutique .product-card img,
+.boutique .product-image img,
+#boutique .product-card img {
+  height: 220px !important;
+  width: 100% !important;
+  object-fit: contain !important;
+  max-height: 220px !important;
+}
+
 /* ========================================
    MODALE DÉCOUVRIR LE CONTENU - LAYOUT 2/3 - 1/3
    ======================================== */

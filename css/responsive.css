@@ -92,6 +92,19 @@ img {
     }
     
     /* ============================================================
+       BOUTIQUE - Produits en colonne verticale (mobile)
+       ============================================================ */
+    .products-grid {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    .product-card {
+        width: 90% !important;
+        max-width: 360px !important;
+        flex: none !important;
+    }
+    
+    /* ============================================================
        ACTE 1 - HERO SLIDER
        ============================================================ */
     
