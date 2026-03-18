@@ -761,6 +761,47 @@ img {
         margin-left: auto !important;
         margin-right: auto !important;
     }
+
+    .communaute .section-header h2,
+    .testimonials h3,
+    .partners h3 {
+        font-size: 1.3rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .stat-card {
+        padding: 12px !important;
+    }
+
+    .stat-number {
+        font-size: 1.5rem !important;
+    }
+
+    .stat-label {
+        font-size: 0.75rem !important;
+    }
+
+    .testimonial-card {
+        padding: 12px !important;
+    }
+
+    .testimonial-content p {
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .testimonial-author img {
+        width: 35px !important;
+        height: 35px !important;
+    }
+
+    .author-info strong {
+        font-size: 0.8rem !important;
+    }
+
+    .author-info span {
+        font-size: 0.7rem !important;
+    }
     
 }
 
