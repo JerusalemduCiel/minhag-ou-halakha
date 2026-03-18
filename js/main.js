@@ -423,6 +423,7 @@ function initSmoothScrolling() {
     document.querySelectorAll('[data-scroll-to]').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const targetId = this.getAttribute('data-scroll-to');
             const targetElement = document.getElementById(targetId);
             
