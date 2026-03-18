@@ -13,17 +13,6 @@ function initializeApp() {
     initDynamicHeader();
     initJeuxShowcase();
     initSmoothScrolling();
-    // Boutons Découvrir : scroll smooth vers la section cible
-    document.querySelectorAll('[data-scroll-to]').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('data-scroll-to');
-            const target = document.getElementById(targetId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
     initHeaderScroll();
     initParticles();
     initBoxAnimations();
@@ -293,8 +282,8 @@ function initJeuxShowcase() {
 
     function updateSlider() {
         // Utiliser 100% par slide (plus fiable sur mobile)
-        // Piste 300% : chaque slide = 33.333% de la piste
-        const translateX = -currentIndex * (100 / slideCount);
+        // Chaque slide fait 100% de la largeur visible
+        const translateX = -currentIndex * 100;
         sliderTrack.style.transform = `translateX(${translateX}%)`;
         
         // Mettre à jour les indicateurs
