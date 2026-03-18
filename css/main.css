@@ -232,6 +232,7 @@ section {
   scroll-snap-align: center; /* Centre les sections à l'écran */
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
 }
 
