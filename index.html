@@ -44,6 +44,8 @@
     <link rel="stylesheet" href="css/prelaunch-popup.css">
     <link rel="stylesheet" href="css/certificates-modal.css">
     <link rel="stylesheet" href="css/rules-modal.css">
+    <link rel="stylesheet" href="https://widget.mondialrelay.com/parcelshop-picker/v4_0/styles/mondialrelay-widget.min.css">
+    <script src="https://widget.mondialrelay.com/parcelshop-picker/v4_0/scripts/mondialrelay-widget.min.js"></script>
     
     <!-- CSS pour produits en préparation -->
     <style>
@@ -1782,6 +1784,13 @@
                     <option value="CH">Suisse</option>
                     <option value="LU">Luxembourg</option>
                 </select>
+                <div id="mr-widget-container" style="display:none; margin-top:20px;">
+                  <p style="font-weight:600; margin-bottom:10px;">
+                    📍 Choisissez votre point relais :
+                  </p>
+                  <div id="Zone_Widget"></div>
+                </div>
+                <input type="hidden" id="SelectedRelay">
                 
                 <textarea name="notes" placeholder="Notes de commande (optionnel)" rows="3"></textarea>
                 
@@ -3200,6 +3209,46 @@
         }
         if (totalEl) totalEl.textContent = formatPrice(total);
     }
+
+    function initMRWidget(codePostal) {
+      $("#Zone_Widget").MR_ParcelShopPicker({
+        Target: "#SelectedRelay",
+        Brand: "CC23VA2Y",
+        Country: "FR",
+        PostCode: codePostal,
+        ColLivMod: "24R",
+        NbResults: "7",
+        OnParcelShopSelected: function(data) {
+          window.selectedRelay = data;
+          document.getElementById('mr-widget-container')
+            .querySelector('p').innerHTML =
+            '✅ Point relais sélectionné : <strong>' +
+            data.Nom + ' — ' + data.Adresse1 +
+            ', ' + data.CP + ' ' + data.Ville + '</strong>';
+        }
+      });
+    }
+
+    function isMondialRelaySelected() {
+      const selectedInput = document.querySelector('input[name="shipping-method"]:checked, input[name="delivery-method"]:checked');
+      const selectedSelect = document.querySelector('select[name="shipping-method"], select[name="delivery-method"]');
+      const selectedValue = ((selectedInput && selectedInput.value) || (selectedSelect && selectedSelect.value) || '').toLowerCase();
+      return selectedValue.includes('mondial') || selectedValue.includes('relay') || selectedValue.includes('24r');
+    }
+
+    function updateMRWidgetVisibility() {
+      const postalInput = document.getElementById('postal') || document.getElementById('customer-zip');
+      const container = document.getElementById('mr-widget-container');
+      if (!postalInput || !container) return;
+
+      const codePostal = (postalInput.value || '').trim();
+      if (codePostal && isMondialRelaySelected()) {
+        container.style.display = 'block';
+        initMRWidget(codePostal);
+      } else {
+        container.style.display = 'none';
+      }
+    }
     
     // Fonction pour fermer la modal de checkout
     function closeCheckout() {
@@ -3241,6 +3290,15 @@
         // Gérer la soumission du formulaire de checkout
         const checkoutForm = document.getElementById('checkout-form');
         if (checkoutForm) {
+            const postalInput = document.getElementById('postal') || document.getElementById('customer-zip');
+            if (postalInput) {
+                postalInput.addEventListener('input', updateMRWidgetVisibility);
+                postalInput.addEventListener('change', updateMRWidgetVisibility);
+            }
+            document.querySelectorAll('input[name="shipping-method"], input[name="delivery-method"], select[name="shipping-method"], select[name="delivery-method"]').forEach((el) => {
+                el.addEventListener('change', updateMRWidgetVisibility);
+            });
+
             // Pré-remplissage automatique en dev uniquement
             if (window.location.hostname === 'localhost' ||
                 window.location.hostname === '127.0.0.1') {
@@ -3289,7 +3347,11 @@
                         city: formData.get('city'),
                         postal: formData.get('postal'),
                         country: formData.get('country')
-                    }
+                    },
+                    relay_name: window.selectedRelay?.Nom || '',
+                    relay_address: window.selectedRelay?.Adresse1 || '',
+                    relay_city: window.selectedRelay?.Ville || '',
+                    relay_id: window.selectedRelay?.ID || ''
                 };
                 
                 console.log('Données envoyées à Stripe:', checkoutData);
