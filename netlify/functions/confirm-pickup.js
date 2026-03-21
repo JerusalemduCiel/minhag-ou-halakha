@@ -32,9 +32,16 @@ exports.handler = async (event) => {
   try {
     // Récupérer la session Stripe
     const session = await stripe.checkout.sessions.retrieve(token);
-    
-    // Vérifier si déjà retiré
-    if (session.metadata?.pickup_confirmed === 'true') {
+
+    // Récupérer le payment intent lié à la session
+    const paymentIntentId = session.payment_intent;
+
+    // Vérifier si déjà retiré (via PaymentIntent metadata)
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      paymentIntentId
+    );
+
+    if (paymentIntent.metadata?.pickup_confirmed === 'true') {
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'text/html' },
@@ -49,10 +56,10 @@ exports.handler = async (event) => {
       };
     }
 
-    // Marquer comme retiré dans Stripe
-    await stripe.checkout.sessions.update(token, {
+    // Marquer comme retiré sur le PaymentIntent
+    await stripe.paymentIntents.update(paymentIntentId, {
       metadata: {
-        ...session.metadata,
+        ...paymentIntent.metadata,
         pickup_confirmed: 'true',
         pickup_date: new Date().toLocaleDateString('fr-FR', {
           day: '2-digit', month: '2-digit', year: 'numeric',
