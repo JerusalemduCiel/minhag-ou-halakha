@@ -1801,10 +1801,19 @@
 align-items:center; gap:6px;">
                     <input type="radio" name="shipping-method" value="collect">
                     🏪 Click & Collect — Gratuit
-                    <span style="font-size:11px; color:#888; display:block;">
-                      Blush Général Store · Lyon 6e · Disponible sous 2-4h
-                    </span>
                   </label>
+                </div>
+
+                <div id="collect-store-selector" style="display:none; 
+margin-top:10px; width:100%;">
+                  <select id="pickup-store" name="pickup_store"
+                    style="width:100%; padding:10px; border:1px solid #ddd; 
+                    border-radius:8px; font-size:14px; background:#fff;">
+                    <option value="">Choisir une boutique...</option>
+                    <option value="blush-lyon">
+                      Blush Général Store — 7 Rue de Sèze, 69006 Lyon
+                    </option>
+                  </select>
                 </div>
                 <div id="mr-widget-container" style="display:none; margin-top:20px;">
                   <p style="font-weight:600; margin-bottom:10px;">
@@ -3337,6 +3346,17 @@ align-items:center; gap:6px;">
             document.querySelectorAll('input[name="shipping-method"]').forEach((el) => {
                 el.addEventListener('change', () => updateMRWidgetVisibility());
             });
+            document.querySelectorAll('input[name="shipping-method"]')
+              .forEach(radio => {
+                radio.addEventListener('change', function() {
+                  const selector = document.getElementById(
+                    'collect-store-selector');
+                  if (selector) {
+                    selector.style.display =
+                      this.value === 'collect' ? 'block' : 'none';
+                  }
+                });
+              });
             const confirmRelayBtn = document.getElementById('confirm-relay-btn');
             if (confirmRelayBtn) {
                 confirmRelayBtn.addEventListener('click', function() {
@@ -3407,7 +3427,8 @@ align-items:center; gap:6px;">
                     relay_city: window.selectedRelay?.Ville || '',
                     relay_id: window.selectedRelay?.ID || '',
                     shipping_method: document.querySelector(
-                      'input[name="shipping-method"]:checked')?.value || 'colissimo'
+                      'input[name="shipping-method"]:checked')?.value || 'colissimo',
+                    pickup_store: document.getElementById('pickup-store')?.value || ''
                 };
                 
                 console.log('Données envoyées à Stripe:', checkoutData);
