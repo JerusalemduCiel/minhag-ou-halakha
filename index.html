@@ -397,33 +397,72 @@
 <body>
     <header id="main-header" class="site-header">
         <div class="header-container">
+            
+            <!-- Logo (s'agrandit au scroll) -->
             <div class="header-logo-wrapper">
                 <a href="#hero-bis-moh" data-scroll-to="hero-bis-moh" class="logo-link">
-                    <img src="images/logo/logo_large_gold.png" alt="Logo Ora Shel Torah" class="header-logo">
+                    <img src="images/logo/logo_large_gold.png" 
+                         alt="Logo Ora Shel Torah - De génération en génération" 
+                         class="header-logo">
                 </a>
             </div>
+
+            <!-- Navigation -->
+            <nav class="header-nav">
+                <a href="#hero-bis-moh" data-scroll-to="hero-bis-moh">Minhag ou Halakha</a>
+                <a href="#boutique" data-scroll-to="boutique">Boutique</a>
+                <a href="#main-footer" data-scroll-to="main-footer">Contact</a>
+            </nav>
+
+            <!-- Actions du header (Précommander + Panier) -->
             <div class="header-actions">
-                <a href="#boutique" class="btn-precommander" data-scroll-to="boutique">Commander</a>
+                <a href="#boutique" class="btn-precommander" data-scroll-to="boutique">
+                Commander
+                </a>
+                
                 <button class="cart-icon" aria-label="Voir le panier">
-                    ??
+                    🛒
                     <span class="cart-count">0</span>
-                </button>
+            </button>
             </div>
+
+            <!-- Menu burger mobile -->
+            <button class="burger-menu" id="burger-menu" aria-label="Ouvrir le menu de navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
         </div>
     </header>
 
+    <!-- Menu mobile navigation -->
+    <nav class="mobile-nav" id="mobile-nav">
+        <a href="#hero-bis-moh" data-scroll-to="hero-bis-moh">Minhag ou Halakha</a>
+        <a href="#boutique" data-scroll-to="boutique">Boutique</a>
+        <a href="#main-footer" data-scroll-to="main-footer">Contact</a>
+        <a href="#boutique" class="btn-precommander-mobile" data-scroll-to="boutique">Commander</a>
+    </nav>
+
     <section id="hero-bis-moh" class="hero-bis moh-hero">
         <div class="hero-bis-bandeau hero-bandeau-ete" style="background: linear-gradient(135deg, #FF6B00, #E55D00); color: #fff; text-align: center; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; margin-bottom: 0;">
-            ? Minhag ou Halakha
+            ✡ Disponible — Été 2026
         </div>
         <div class="hero-bis-background">
-            <img src="images/produits/moh_hero_bg.png" alt="Minhag ou Halakha" loading="lazy">
+            <img src="images/produits/moh_hero_bg.png" alt="Cartes du jeu Minhag ou Halakha avec sources rabbiniques et explications halakhiques pour distinguer lois et coutumes" loading="lazy">
         </div>
         <div class="hero-bis-content">
-            <h2>Minhag ou Halakha <span class="h2-subtitle">? Distinguer lois et coutumes</span></h2>
-            <p class="hero-bis-subtitle">Loi ou coutume ? D?couvrez la diff?rence.</p>
+            <h2>Minhag ou Halakha <span class="h2-subtitle">— Distinguer lois et coutumes</span></h2>
+            <p class="hero-bis-subtitle">Loi ou coutume ? Découvrez la différence</p>
             <div class="hero-bis-actions">
-                <a href="#boutique" class="btn-modal btn-store" data-scroll-to="boutique">?? Commander</a>
+                <button class="btn-modal" data-action="demo">
+                    🎮 Essayer la démo
+                </button>
+                <button class="btn-modal btn-hero" onclick="openModal('modal-contenu-moh')">📦 Découvrir le contenu</button>
+                <button class="btn-hero btn-modal" onclick="openModal('modal-carte-apercu-moh')">📖 Feuilleter les pages</button>
+                <button class="btn-modal btn-store" data-action="store">
+                    🛒 Commander
+                </button>
             </div>
         </div>
     </section>
@@ -433,7 +472,7 @@
             <div class="section-header center">
                 <span class="eyebrow">Boutique</span>
                 <h2>Minhag ou Halakha</h2>
-                <p class="intro">Prix unique : 39,90 ?</p>
+                <p class="intro">Prix unique : 39,90 €</p>
             </div>
             <div class="products-grid">
                 <div class="product-card" data-product-id="moh">
@@ -442,14 +481,14 @@
                     </div>
                     <div class="product-info">
                         <h3>Minhag ou Halakha</h3>
-                        <p class="product-tagline">Livre premium ? 18 chapitres ? 150 lois et usages sur 344 pages</p>
+                        <p class="product-tagline">Livre premium — 18 chapitres — 150 lois et usages sur 344 pages</p>
                         <div class="product-specs">
-                            <span>Ouvrage ? Distinguer la loi religieuse de la coutume et comprendre leurs sources</span>
+                            <span>Ouvrage — Distinguer la loi religieuse de la coutume et comprendre leurs sources</span>
                         </div>
                         <div class="product-price">
-                            <span class="price-current">39,90 ?</span>
+                            <span class="price-current">39,90 €</span>
                         </div>
-                        <button class="btn-add-to-cart" onclick="addToCart('moh', 'Minhag ou Halakha', 39.90, 'images/moh_livre_face.png')">?? Ajouter au panier</button>
+                        <button class="btn-add-to-cart" onclick="addToCart('moh', 'Minhag ou Halakha', 39.90, 'images/moh_livre_face.png')">🛒 Ajouter au panier</button>
                     </div>
                 </div>
             </div>
@@ -465,11 +504,11 @@
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Total:</span>
-                <span id="cart-total">0,00 ?</span>
+                <span id="cart-total">0,00 €</span>
             </div>
             <div class="cart-footer-buttons">
-                <button class="btn-continue-shopping" onclick="continueShoppingFromCart()">? Continuer mes achats</button>
-                <button class="btn-checkout" onclick="proceedToCheckout()">Commander ?</button>
+                <button class="btn-continue-shopping" onclick="continueShoppingFromCart()">← Continuer mes achats</button>
+                <button class="btn-checkout" onclick="proceedToCheckout()">Commander →</button>
             </div>
         </div>
     </div>
@@ -477,18 +516,18 @@
     <div id="checkout-modal" class="checkout-modal">
         <div class="checkout-content">
             <button class="close-modal" onclick="closeCheckout()">&times;</button>
-            <h2>R?capitulatif de votre commande</h2>
+            <h2>Récapitulatif de votre commande</h2>
             <div class="checkout-items" id="checkout-items"></div>
             <div class="checkout-summary">
-                <div class="summary-line"><span>Sous-total:</span><span id="subtotal">0,00 ?</span></div>
-                <div class="summary-line"><span>Frais de port : ? partir de 4,90 ? (choix ? l'?tape suivante)</span></div>
-                <div class="summary-line total"><span>Total TTC:</span><span id="total">0,00 ?</span></div>
+                <div class="summary-line"><span>Sous-total:</span><span id="subtotal">0,00 €</span></div>
+                <div class="summary-line"><span>Frais de port : à partir de 4,90 € (choix à l'étape suivante)</span></div>
+                <div class="summary-line total"><span>Total TTC:</span><span id="total">0,00 €</span></div>
             </div>
             <form id="checkout-form">
                 <h3>Informations de livraison</h3>
                 <input type="text" name="name" id="customer-name" placeholder="Nom complet *" autocomplete="name" required>
                 <input type="email" name="email" id="customer-email" placeholder="Email *" autocomplete="email" required>
-                <input type="tel" name="phone" id="customer-phone" placeholder="T?l?phone *" autocomplete="tel" required>
+                <input type="tel" name="phone" id="customer-phone" placeholder="Téléphone *" autocomplete="tel" required>
                 <input type="text" name="address" id="customer-address" placeholder="Adresse *" autocomplete="street-address" required>
                 <input type="text" name="city" id="customer-city" placeholder="Ville *" autocomplete="address-level2" required>
                 <input type="text" name="postal" id="customer-zip" placeholder="Code postal *" autocomplete="postal-code" required>
@@ -500,36 +539,142 @@
                     <option value="LU">Luxembourg</option>
                 </select>
                 <div style="margin: 16px 0; display:flex; gap:12px;">
-                    <label style="flex:1; cursor:pointer;"><input type="radio" name="shipping-method" value="colissimo" checked> ?? Colissimo Domicile ? 7,90 ?</label>
-                    <label style="flex:1; cursor:pointer;"><input type="radio" name="shipping-method" value="mondial-relay"> ?? Mondial Relay ? 4,90 ?</label>
-                    <label style="flex:1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="radio" name="shipping-method" value="collect"> ?? Click & Collect ? Gratuit</label>
+                    <label style="flex:1; cursor:pointer;"><input type="radio" name="shipping-method" value="colissimo" checked> 📮 Colissimo Domicile — 7,90 €</label>
+                    <label style="flex:1; cursor:pointer;"><input type="radio" name="shipping-method" value="mondial-relay"> 📦 Mondial Relay — 4,90 €</label>
+                    <label style="flex:1; cursor:pointer; display:flex; align-items:center; gap:6px;"><input type="radio" name="shipping-method" value="collect"> 🏪 Click & Collect — Gratuit</label>
                 </div>
                 <div id="collect-store-selector" style="display:none; margin-top:10px; width:100%;">
                     <select id="pickup-store" name="pickup_store" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; background:#fff;">
                         <option value="">Choisir une boutique...</option>
-                        <option value="blush-lyon">Blush G?n?ral Store ? 7 Rue de S?ze, 69006 Lyon</option>
+                        <option value="blush-lyon">Blush Général Store — 7 Rue de Sèze, 69006 Lyon</option>
                     </select>
                 </div>
                 <div id="mr-widget-container" style="display:none; margin-top:20px;">
-                    <p style="font-weight:600; margin-bottom:10px;">?? Choisissez votre point relais :</p>
+                    <p style="font-weight:600; margin-bottom:10px;">📍 Choisissez votre point relais :</p>
                     <div id="Zone_Widget"></div>
-                    <button type="button" id="confirm-relay-btn" style="display:none; margin-top:12px; background:#eda234; color:#0f1419; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; width:100%">? Confirmer ce point relais</button>
+                    <button type="button" id="confirm-relay-btn" style="display:none; margin-top:12px; background:#eda234; color:#0f1419; border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; width:100%">✅ Confirmer ce point relais</button>
                 </div>
                 <input type="hidden" id="SelectedRelay">
                 <textarea name="notes" placeholder="Notes de commande (optionnel)" rows="3"></textarea>
                 <div class="checkout-actions">
-                    <button type="button" onclick="closeCheckout()" class="btn-back">? Retour au panier</button>
-                    <button type="submit" class="btn-pay">Payer par carte ?</button>
+                    <button type="button" onclick="closeCheckout()" class="btn-back">← Retour au panier</button>
+                    <button type="submit" class="btn-pay">Payer par carte →</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- MODALE : Contenu du livre Minhag ou Halakha -->
+    <div id="modal-contenu-moh" class="modal">
+        <div class="modal-content" style="max-width:1000px; width:92%; margin:30px auto; padding:1.5rem; background:white; border-radius:12px; position:relative;">
+            <span class="modal-close" onclick="closeModal('modal-contenu-moh')" style="position:absolute; top:10px; right:15px; font-size:2rem; cursor:pointer; z-index:10; color:#666;">&times;</span>
+            <h3 style="text-align:center; margin-bottom:1rem; color:#4A4540; font-family:Georgia,serif;">
+                Découvrir le contenu
+            </h3>
+            <div style="text-align:center;">
+                <img src="pages/moh/moh_page_005_hd.png"
+                     alt="Minhag ou Halakha - Page 005"
+                     onclick="openMohBookLightbox(this.src, this.alt)"
+                     style="max-width:100%; max-height:75vh; object-fit:contain; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); cursor:zoom-in;"
+                     loading="lazy">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALE : Feuilleter les pages (Minhag ou Halakha) -->
+    <div id="modal-carte-apercu-moh" class="modal">
+        <div class="modal-content" style="max-width:850px; width:92%; margin:30px auto; padding:1.5rem; background:white; border-radius:12px; position:relative;">
+            <span class="modal-close" onclick="closeModal('modal-carte-apercu-moh')" style="position:absolute; top:10px; right:15px; font-size:2rem; cursor:pointer; z-index:10; color:#666;">&times;</span>
+            <h3 style="text-align:center; margin-bottom:0.5rem; color:#4A4540; font-family:Georgia,serif;">
+                Feuilleter les pages
+            </h3>
+            <p style="text-align:center; color:#8A8070; margin-bottom:1.5rem; font-style:italic; font-size:0.9rem;">
+                Découvrez quelques doubles pages du livre Minhag ou Halakha
+            </p>
+            
+            <!-- Carrousel simple show/hide -->
+            <div id="book-carousel-moh" style="position:relative; width:100%; text-align:center;">
+                <div class="book-slide-moh active" style="display:block;">
+                    <img src="pages/moh/moh_pages_14_15.png" alt="Minhag ou Halakha - Pages 14 et 15" onclick="openMohBookLightbox(this.src, this.alt)" style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:6px; box-shadow:0 4px 15px rgba(0,0,0,0.2); cursor:zoom-in;">
+                    <p style="margin-top:0.6rem; color:#8A8070; font-size:0.85rem;">Pages 14-15</p>
+                </div>
+                <div class="book-slide-moh" style="display:none;">
+                    <img src="pages/moh/moh_pages_16_17.png" alt="Minhag ou Halakha - Pages 16 et 17" onclick="openMohBookLightbox(this.src, this.alt)" style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:6px; box-shadow:0 4px 15px rgba(0,0,0,0.2); cursor:zoom-in;">
+                    <p style="margin-top:0.6rem; color:#8A8070; font-size:0.85rem;">Pages 16-17</p>
+                </div>
+                <div class="book-slide-moh" style="display:none;">
+                    <img src="pages/moh/moh_pages_18_19.png" alt="Minhag ou Halakha - Pages 18 et 19" onclick="openMohBookLightbox(this.src, this.alt)" style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:6px; box-shadow:0 4px 15px rgba(0,0,0,0.2); cursor:zoom-in;">
+                    <p style="margin-top:0.6rem; color:#8A8070; font-size:0.85rem;">Pages 18-19</p>
+                </div>
+
+                <button type="button" onclick="changeMohBookSlide(-1)" style="position:absolute; left:5px; top:45%; transform:translateY(-50%); background:rgba(212,169,74,0.85); color:white; border:none; border-radius:50%; width:40px; height:40px; font-size:1.4rem; cursor:pointer; z-index:5;">‹</button>
+                <button type="button" onclick="changeMohBookSlide(1)" style="position:absolute; right:5px; top:45%; transform:translateY(-50%); background:rgba(212,169,74,0.85); color:white; border:none; border-radius:50%; width:40px; height:40px; font-size:1.4rem; cursor:pointer; z-index:5;">›</button>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:8px; margin-top:1rem;">
+                <span class="book-dot-moh active" onclick="goToMohBookSlide(0)" style="width:10px; height:10px; border-radius:50%; background:#D4A94A; cursor:pointer;"></span>
+                <span class="book-dot-moh" onclick="goToMohBookSlide(1)" style="width:10px; height:10px; border-radius:50%; background:#ccc; cursor:pointer;"></span>
+                <span class="book-dot-moh" onclick="goToMohBookSlide(2)" style="width:10px; height:10px; border-radius:50%; background:#ccc; cursor:pointer;"></span>
+            </div>
+            <p id="book-counter-moh" style="text-align:center; margin-top:0.5rem; color:#B0A590; font-size:0.8rem;">1 / 3</p>
+        </div>
+    </div>
+
     <footer id="main-footer">
         <div class="footer-content">
+            <!-- Instagram en haut, centré -->
+            <div class="footer-social">
+                <a href="https://www.instagram.com/orasheltorah/" target="_blank" rel="noopener" aria-label="Suivez-nous sur Instagram">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Colonnes du footer -->
+            <div class="footer-columns">
+                <!-- Colonne 1 : À Propos -->
+                <div class="footer-column">
+                    <h3>À Propos</h3>
+                    <nav>
+                        <a href="#hero-bis-moh" data-scroll-to="hero-bis-moh">Minhag ou Halakha</a>
+                        <a href="#boutique" data-scroll-to="boutique">Boutique</a>
+                        <a href="mailto:contact@orasheltorah.com">Contact</a>
+                    </nav>
+                </div>
+
+                <!-- Colonne 2 : Informations Légales -->
+                <div class="footer-column">
+                    <h3>Informations Légales</h3>
+                    <nav>
+                        <a href="legal/mentions-legales.html">Mentions légales</a>
+                        <a href="legal/cgv.html">Conditions générales de vente</a>
+                        <a href="legal/politique-confidentialite.html">Politique de confidentialité</a>
+                        <a href="legal/retours-remboursements.html">Retours & Remboursements</a>
+                    </nav>
+                </div>
+
+                <!-- Colonne 3 : Aide & Support -->
+                <div class="footer-column">
+                    <h3>Aide & Support</h3>
+                    <nav>
+                        <a href="faq.html">Questions fréquentes</a>
+                        <a href="mailto:contact@orasheltorah.com">Nous contacter</a>
+                    </nav>
+                </div>
+
+                <!-- Colonne 4 : Ora Shel Torah (coordonnées) -->
+                <div class="footer-column footer-contact">
+                    <h3>Ora Shel Torah</h3>
+                    <p>Lyon 6e</p>
+                    <p><a href="mailto:contact@orasheltorah.com">contact@orasheltorah.com</a></p>
+                    <p><a href="tel:+33618061000">06 18 06 10 00</a></p>
+                </div>
+            </div>
+
             <div class="footer-bottom">
-                <p>? <span id="copyright-year">2025</span> Ora Shel Torah - Tous droits r?serv?s</p>
-                <p class="footer-tagline">Minhag ou Halakha</p>
+                <p>© <span id="copyright-year">2025</span> Ora Shel Torah - Tous droits réservés</p>
+                <p class="footer-tagline">✨ "De génération en génération" ✨</p>
             </div>
         </div>
     </footer>
@@ -674,7 +819,7 @@
                     <img src="${item.image}" alt="${item.name}" loading="lazy">
                     <div class="item-details">
                         <h4>${item.name}</h4>
-                        <p>Quantit?: ${item.quantity || 1}</p>
+                        <p>Quantité: ${item.quantity || 1}</p>
                     </div>
                     <div class="item-price">${formatPrice((item.price || 0) * (item.quantity || 1))}</div>
                 </div>
@@ -717,7 +862,7 @@
                         if (container) {
                             const txt = container.querySelector('p');
                             if (txt) {
-                                txt.innerHTML = '? Point relais s?lectionn? : <strong>' + data.Nom + ' ? ' + data.Adresse1 + ', ' + data.CP + ' ' + data.Ville + '</strong>';
+                                txt.innerHTML = '✅ Point relais sélectionné : <strong>' + data.Nom + ' — ' + data.Adresse1 + ', ' + data.CP + ' ' + data.Ville + '</strong>';
                             }
                         }
                     }
@@ -760,7 +905,7 @@
                     e.preventDefault();
                     const formData = new FormData(checkoutForm);
                     const submitBtn = checkoutForm.querySelector('button[type="submit"]');
-                    const originalText = submitBtn?.textContent || 'Payer par carte ?';
+                    const originalText = submitBtn?.textContent || 'Payer par carte →';
 
                     const checkoutData = {
                         items: cart.map((item) => ({ priceId: item.priceId, quantity: item.quantity || 1 })),
@@ -801,7 +946,7 @@
                         const stripe = Stripe('pk_live_51SBeyrLLfYKjr3rUDC9XHZw0mEQPPnQnR7bWnhkec0MqOGh6BfNKm1z9PAHmoT5ozk21RiZI2g4CZYBPb8DP8PZ000gcXNmXeL');
                         await stripe.redirectToCheckout({ sessionId: payload.sessionId });
                     } catch (error) {
-                        alert('Erreur de paiement : ' + (error.message || 'Veuillez r?essayer.'));
+                        alert('Erreur de paiement : ' + (error.message || 'Veuillez réessayer.'));
                     } finally {
                         if (submitBtn) {
                             submitBtn.disabled = false;
@@ -819,5 +964,205 @@
             }
         });
     </script>
+
+    <script>
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const demoBtn = e.target.closest('[data-action="demo"]');
+        if (demoBtn) {
+            e.preventDefault();
+            window.open('https://minhagouhalakha.netlify.app', '_blank');
+        }
+
+        const storeBtn = e.target.closest('[data-action="store"]');
+        if (storeBtn) {
+            e.preventDefault();
+            const target = document.getElementById('boutique');
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+    </script>
+
+    <script>
+    // === CARROUSEL FEUILLETER LES PAGES MOH (SHOW/HIDE) ===
+    var currentMohBookSlide = 0;
+    var TOTAL_MOH_BOOK_SLIDES = 3;
+
+    function changeMohBookSlide(direction) {
+        currentMohBookSlide = (currentMohBookSlide + direction + TOTAL_MOH_BOOK_SLIDES) % TOTAL_MOH_BOOK_SLIDES;
+        showMohBookSlide();
+    }
+
+    function goToMohBookSlide(index) {
+        currentMohBookSlide = index;
+        showMohBookSlide();
+    }
+
+    function showMohBookSlide() {
+        var slides = document.querySelectorAll('#book-carousel-moh .book-slide-moh');
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].style.display = 'none';
+        }
+        if (slides[currentMohBookSlide]) {
+            slides[currentMohBookSlide].style.display = 'block';
+        }
+        var dots = document.querySelectorAll('#modal-carte-apercu-moh .book-dot-moh');
+        for (var j = 0; j < dots.length; j++) {
+            dots[j].style.background = (j === currentMohBookSlide) ? '#D4A94A' : '#ccc';
+        }
+        var counter = document.getElementById('book-counter-moh');
+        if (counter) {
+            counter.textContent = (currentMohBookSlide + 1) + ' / ' + TOTAL_MOH_BOOK_SLIDES;
+        }
+    }
+
+    // === LIGHTBOX ZOOM POUR FEUILLETER LES PAGES MOH ===
+    var mohLightboxZoomed = false;
+
+    function openMohBookLightbox(src, alt) {
+        var lightbox = document.getElementById('book-lightbox-moh');
+        var img = document.getElementById('lightbox-img-moh');
+        if (!lightbox || !img) return;
+        img.src = src;
+        img.alt = alt || 'Zoom';
+        img.style.width = '90%';
+        mohLightboxZoomed = false;
+        img.style.cursor = 'zoom-in';
+        lightbox.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMohBookLightbox() {
+        var lightbox = document.getElementById('book-lightbox-moh');
+        if (lightbox) {
+            lightbox.style.display = 'none';
+        }
+        document.body.style.overflow = '';
+        mohLightboxZoomed = false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var closeBtnMoh = document.getElementById('lightbox-close-moh');
+        if (closeBtnMoh) {
+            closeBtnMoh.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeMohBookLightbox();
+            });
+        }
+
+        var lightboxMoh = document.getElementById('book-lightbox-moh');
+        if (lightboxMoh) {
+            lightboxMoh.addEventListener('click', function(e) {
+                if (e.target === lightboxMoh) {
+                    closeMohBookLightbox();
+                }
+            });
+        }
+
+        var imgMoh = document.getElementById('lightbox-img-moh');
+        if (imgMoh) {
+            imgMoh.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (mohLightboxZoomed) {
+                    imgMoh.style.width = '90%';
+                    imgMoh.style.cursor = 'zoom-in';
+                    mohLightboxZoomed = false;
+                    if (lightboxMoh) {
+                        lightboxMoh.scrollTop = 0;
+                        lightboxMoh.scrollLeft = 0;
+                    }
+                } else {
+                    imgMoh.style.width = '180%';
+                    imgMoh.style.cursor = 'zoom-out';
+                    mohLightboxZoomed = true;
+                }
+            });
+        }
+
+        if (lightboxMoh) {
+            lightboxMoh.addEventListener('wheel', function(e) {
+                if (lightboxMoh.style.display === 'block') {
+                    e.preventDefault();
+                    var lbImgMoh = document.getElementById('lightbox-img-moh');
+                    if (!lbImgMoh) return;
+                    var currentWidthMoh = parseFloat(lbImgMoh.style.width) || 90;
+                    if (e.deltaY < 0) {
+                        currentWidthMoh = Math.min(currentWidthMoh + 15, 300);
+                    } else {
+                        currentWidthMoh = Math.max(currentWidthMoh - 15, 50);
+                    }
+                    lbImgMoh.style.width = currentWidthMoh + '%';
+                    lbImgMoh.style.cursor = currentWidthMoh > 95 ? 'zoom-out' : 'zoom-in';
+                    mohLightboxZoomed = currentWidthMoh > 95;
+                }
+            }, { passive: false });
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var lightboxMoh = document.getElementById('book-lightbox-moh');
+            if (lightboxMoh && lightboxMoh.style.display === 'block') {
+                closeMohBookLightbox();
+                return;
+            }
+            var modalMoh = document.getElementById('modal-carte-apercu-moh');
+            if (modalMoh && modalMoh.classList.contains('active')) {
+                closeModal('modal-carte-apercu-moh');
+            }
+        }
+    });
+    </script>
+
+    <!-- LIGHTBOX ZOOM PLEIN ÉCRAN (MOH) -->
+    <div id="book-lightbox-moh" style="
+        display:none;
+        position:fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        background:rgba(0,0,0,0.92);
+        z-index:99999;
+        cursor:zoom-out;
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
+        text-align:center;
+    ">
+        <button id="lightbox-close-moh" type="button" style="
+            position:fixed;
+            top:15px; right:20px;
+            background:rgba(212,169,74,0.9);
+            color:white;
+            border:none;
+            border-radius:50%;
+            width:44px; height:44px;
+            font-size:1.8rem;
+            cursor:pointer;
+            z-index:100000;
+            line-height:42px;
+        ">&times;</button>
+        <img id="lightbox-img-moh" src="" alt="Zoom" style="
+            margin:20px auto;
+            display:block;
+            max-width:none;
+            width:90%;
+            transition:width 0.3s ease;
+            cursor:zoom-in;
+        ">
+    </div>
 </body>
 </html>
