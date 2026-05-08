@@ -458,8 +458,8 @@
                 </button>
                 <button class="btn-modal btn-hero" onclick="openModal('modal-contenu-moh')">📦 Découvrir le contenu</button>
                 <button class="btn-hero btn-modal" onclick="openModal('modal-carte-apercu-moh')">📖 Feuilleter les pages</button>
-                <button class="btn-modal btn-store" data-action="store">
-                    🛒 Commander
+                <button class="btn-modal btn-store" data-action="store" disabled aria-disabled="true">
+                    ⏳ Bientôt disponible
                 </button>
             </div>
         </div>
@@ -473,7 +473,8 @@
                 <p class="intro">Prix unique : 44,90 €</p>
             </div>
             <div class="products-grid">
-                <div class="product-card" data-product-id="moh">
+                <div class="product-card product-card--coming-soon" data-product-id="moh">
+                    <span class="coming-soon-ribbon">Bientôt disponible</span>
                     <div class="product-image" style="height: 220px; overflow: hidden;">
                         <img src="images/moh_livre_face.png" alt="Minhag ou Halakha" loading="lazy" style="height: 220px; width: 100%; object-fit: cover; object-position: center; display: block;">
                     </div>
@@ -486,7 +487,7 @@
                         <div class="product-price">
                             <span class="price-current">44,90 €</span>
                         </div>
-                        <button class="btn-add-to-cart" onclick="addToCart('moh', 'Minhag ou Halakha', 44.90, 'images/moh_livre_face.png')">🛒 Ajouter au panier</button>
+                        <button class="btn-add-to-cart" disabled aria-disabled="true">⏳ Bientôt disponible</button>
                     </div>
                 </div>
             </div>
@@ -692,11 +693,13 @@
                 price: 44.90,
                 priceId: 'price_1TBx0G1LfYKp3rUqsV4WG2Z',
                 image: 'images/moh_livre_face.png',
-                available: true
+                available: false
             }
         };
 
         try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch (e) { cart = []; }
+        cart = cart.filter((item) => products[item.id]?.available !== false);
+        localStorage.setItem('cart', JSON.stringify(cart));
 
         function formatPrice(price) {
             return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
@@ -757,7 +760,7 @@
 
         function addToCart(productId, productName, price, image) {
             const product = products[productId];
-            if (!product || !product.priceId) {
+            if (!product || !product.priceId || product.available === false) {
                 alert('Erreur: produit non disponible.');
                 return;
             }
@@ -990,6 +993,9 @@
         const storeBtn = e.target.closest('[data-action="store"]');
         if (storeBtn) {
             e.preventDefault();
+            if (storeBtn.disabled || storeBtn.getAttribute('aria-disabled') === 'true') {
+                return;
+            }
             const target = document.getElementById('boutique');
             if (target) target.scrollIntoView({ behavior: 'smooth' });
         }
