@@ -39,7 +39,7 @@ exports.handler = async (event) => {
     const unavailableProducts = [];
     const priceMap = {
       'price_1SBf5wL4ecjfMIxOm0nbZ5sp': 'jdc',
-      'price_1SBf6vL4ecjfMIxOYXAbWfh8': 'moh',
+      'price_1TBx06LLfYKjr3rUqsV4WG2Z': 'moh',
       'price_1SBf7lL4ecjfMIxOKuRj4czs': 'poz'
     };
     
