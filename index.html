@@ -618,7 +618,7 @@
 
             itemsDiv.innerHTML = cart.map((item) => `
                 <div class="cart-item" data-product="${item.id}">
-                    <img src="${item.image}" alt="${item.name}" loading="lazy">
+                    <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='images/moh_livre_face.png';">
                     <div class="cart-item-details">
                         <h4>${item.name}</h4>
                         <p>${formatPrice(item.price)}</p>
@@ -696,7 +696,7 @@
 
             itemsDiv.innerHTML = cart.map((item) => `
                 <div class="checkout-item">
-                    <img src="${item.image}" alt="${item.name}" loading="lazy">
+                    <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='images/moh_livre_face.png';">
                     <div class="item-details">
                         <h4>${item.name}</h4>
                         <p>Quantité: ${item.quantity || 1}</p>
