@@ -1,0 +1,124 @@
+/* ============================================================
+   GABARIT HERO-BIS — Lumières d'Israël
+   Feuille isolée (namespace .gabarit-*). N'altère aucune règle existante.
+   À déposer dans css/gabarit.css et lier dans le <head>.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@700&display=swap');
+
+/* Reset scopé aux descendants du gabarit uniquement */
+.gabarit, .gabarit *, .gabarit *::before, .gabarit *::after { box-sizing: border-box; }
+.gabarit h1, .gabarit h2, .gabarit p, .gabarit dl, .gabarit dd, .gabarit dt { margin: 0; padding: 0; }
+
+/* Variables scopées (ne polluent pas le :root du site) */
+.gabarit {
+  --or: #d9b25a;
+  --or-soft: rgba(217,178,90,.30);
+  --ivoire: #f3ead7;
+  --ivoire-soft: rgba(243,234,215,.74);
+}
+.gabarit-pt     { --ink1:#221a12; --ink2:#3a2b1c; }
+.gabarit-moh    { --ink1:#250d10; --ink2:#3a161a; }
+.gabarit-lannee { --ink1:#0d201b; --ink2:#163029; }
+
+/* Conteneur section */
+.gabarit {
+  position: relative; overflow: hidden;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 24px;
+  font-family: 'Inter', sans-serif;
+  color: var(--ivoire);
+}
+
+/* Couche fond (dégradé + cadre + vignette) */
+.gabarit-bg { position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(120% 90% at 28% 34%, rgba(217,178,90,.15) 0%, rgba(217,178,90,0) 55%),
+    linear-gradient(140deg, var(--ink2) 0%, var(--ink1) 60%, #100b07 100%);
+}
+.gabarit-bg::after  { content:""; position:absolute; inset:26px; border:1px solid var(--or-soft); }
+.gabarit-bg::before { content:""; position:absolute; inset:0;
+  background: radial-gradient(130% 120% at 50% 50%, transparent 55%, rgba(0,0,0,.45) 100%); }
+
+/* Filigrane hébreu */
+.gabarit-watermark { position:absolute; z-index:1; right:3%; bottom:-5%;
+  font-family:'Noto Serif Hebrew',serif; font-weight:700; font-size:25vh; line-height:1;
+  color:var(--or); opacity:.05; user-select:none; white-space:nowrap; pointer-events:none; }
+
+/* Grille 2 colonnes */
+.gabarit-inner { position:relative; z-index:2; width:100%; max-width:1080px;
+  display:grid; grid-template-columns:360px 1fr; gap:64px; align-items:center; }
+
+/* Colonne visuel */
+.gabarit-visuel { width:360px; display:flex; flex-direction:column; align-items:center; gap:18px; }
+.cover-stage { position:relative; height:360px; display:flex; align-items:center; justify-content:center; }
+.gabarit-cover { height:360px; width:auto; display:block; border-radius:4px; cursor:zoom-in;
+  box-shadow:0 2px 4px rgba(0,0,0,.4),0 16px 36px rgba(0,0,0,.55),0 36px 72px rgba(0,0,0,.45); }
+.gabarit .loupe { position:absolute; pointer-events:none; width:190px; height:190px; border-radius:50%;
+  border:2px solid var(--or); box-shadow:0 8px 30px rgba(0,0,0,.55);
+  background-repeat:no-repeat; display:none; z-index:30; }
+.zoom-hint { position:absolute; bottom:8px; right:8px; z-index:25; font-size:.62rem; letter-spacing:.12em;
+  text-transform:uppercase; color:rgba(243,234,215,.6); background:rgba(0,0,0,.35);
+  padding:4px 8px; border-radius:20px; pointer-events:none; }
+
+/* Galerie vignettes */
+.gabarit .thumbs { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; max-width:360px; }
+.gabarit .thumb { height:74px; border:1px solid rgba(217,178,90,.35); border-radius:3px; overflow:hidden;
+  background:#1d160e; cursor:pointer; padding:0; line-height:0;
+  transition:border-color .25s, transform .25s, box-shadow .25s; }
+.gabarit .thumb img { height:74px; width:auto; display:block; }
+.gabarit .thumb:hover { transform:translateY(-2px); }
+.gabarit .thumb.active { border-color:var(--or); box-shadow:0 0 0 1px var(--or),0 6px 16px rgba(0,0,0,.4); }
+
+/* Colonne éditoriale */
+.gabarit-editorial { max-width:540px; }
+.gabarit .collection-label { font-size:.78rem; font-weight:600; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--or); margin-bottom:16px; }
+.gabarit-title { font-family:'Crimson Text',serif; font-weight:700;
+  font-size:clamp(2.4rem,4.6vw,3.6rem); line-height:1.05; margin-bottom:12px; color:var(--ivoire); }
+.gabarit-subtitle { font-family:'Crimson Text',serif; font-style:italic;
+  font-size:clamp(1.1rem,2vw,1.45rem); color:var(--ivoire-soft); margin-bottom:22px; }
+.gabarit .desc { font-size:1rem; line-height:1.72; color:var(--ivoire-soft); margin-bottom:16px; }
+
+/* Caractéristiques */
+.gabarit .specs { display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; margin:26px 0 30px;
+  padding:22px 0; border-top:1px solid var(--or-soft); border-bottom:1px solid var(--or-soft); max-width:440px; }
+.gabarit .specs > div { display:flex; flex-direction:column; gap:3px; }
+.gabarit .specs dt { font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--or); }
+.gabarit .specs dd { font-family:'Crimson Text',serif; font-size:1.25rem; color:var(--ivoire); }
+
+/* CTA */
+.gabarit .cta-row { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+.gabarit .prix { font-family:'Crimson Text',serif; font-size:2rem; font-weight:700; color:var(--ivoire); }
+.gabarit .btn-commander { display:inline-flex; align-items:center; font-family:'Inter',sans-serif;
+  font-size:1.05rem; font-weight:600; color:#231a10; text-decoration:none; cursor:pointer;
+  padding:16px 40px; border-radius:6px; border:none; background:linear-gradient(135deg,#e7c270,var(--or));
+  box-shadow:0 10px 28px rgba(217,178,90,.32);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.gabarit .btn-commander:hover { transform:translateY(-3px); box-shadow:0 16px 38px rgba(217,178,90,.45); }
+.gabarit .btn-secondary { display:inline-flex; align-items:center; font-family:'Inter',sans-serif;
+  font-size:.92rem; font-weight:500; color:var(--ivoire-soft); text-decoration:none; cursor:pointer;
+  padding:14px 22px; border-radius:6px; background:transparent; border:1px solid var(--or-soft);
+  transition:border-color .3s, color .3s; }
+.gabarit .btn-secondary:hover { border-color:var(--or); color:var(--ivoire); }
+.gabarit .reassurance { margin-top:18px; font-size:.82rem; color:rgba(243,234,215,.5); letter-spacing:.04em; }
+
+/* Lightbox (créée par js/gabarit.js, une seule pour toute la page) */
+.gabarit-lightbox { position:fixed; inset:0; background:rgba(8,6,4,.93); display:none;
+  align-items:center; justify-content:center; z-index:9999; cursor:zoom-out; padding:30px; }
+.gabarit-lightbox.open { display:flex; }
+.gabarit-lightbox img { max-width:92vw; max-height:92vh; border-radius:6px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+
+/* Pas de loupe sur écrans tactiles */
+@media (hover:none) { .gabarit .loupe { display:none !important; } }
+
+/* Mobile */
+@media (max-width:768px) {
+  .gabarit { padding:50px 18px; min-height:100vh; }
+  .gabarit-inner { grid-template-columns:1fr; gap:34px; justify-items:center; text-align:center; }
+  .gabarit-visuel { width:100%; }
+  .gabarit .specs { margin-left:auto; margin-right:auto; }
+  .gabarit .cta-row { justify-content:center; }
+  .gabarit .desc { margin-left:auto; margin-right:auto; }
+  .gabarit-watermark { font-size:15vh; }
+}
