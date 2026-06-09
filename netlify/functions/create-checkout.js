@@ -35,23 +35,16 @@ exports.handler = async (event) => {
       throw new Error('STRIPE_SECRET_KEY manquante dans les variables d\'environnement');
     }
 
-    // Vérifier que les produits demandés sont disponibles
-    const unavailableProducts = [];
-    const priceMap = {
-      'price_1SBf5wL4ecjfMIxOm0nbZ5sp': 'jdc',
-      'price_1TBx06LLfYKjr3rUqsV4WG2Z': 'moh',
-      'price_1SBf7lL4ecjfMIxOKuRj4czs': 'poz'
-    };
-    
-    const requestedProducts = items.map(item => priceMap[item.priceId]).filter(Boolean);
-    const hasUnavailable = requestedProducts.some(p => unavailableProducts.includes(p));
+    // Boutique mono-titre : seul le produit MOH est vendable ici
+    const MOH_PRICE_ID = 'price_1TBx06LLfYKjr3rUqsV4WG2Z'; // Minhag ou Halakha — 44,90 €
 
-    if (hasUnavailable) {
+    const hasInvalidProduct = items.some(item => item.priceId !== MOH_PRICE_ID);
+    if (hasInvalidProduct) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ 
-          error: 'Certains produits ne sont pas encore disponibles. Sortie prévue : Printemps 2026.'
+        body: JSON.stringify({
+          error: 'Produit indisponible dans cette boutique.'
         })
       };
     }
@@ -64,31 +57,10 @@ exports.handler = async (event) => {
     // Frais de port fixes Colissimo
     const shippingCost = 7.59;
 
-    // Line items Stripe
-    const lineItems = items.map(item => {
-      if (
-        item.priceId === 'price_1Scn6GL4ecjfMIxOPxaM9FMl' ||
-        item.id === 'lumieres' ||
-        item.productId === 'lumieres' ||
-        item.name === 'La Parole Transmise - Lumières d\'Israël'
-      ) {
-        return {
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: item.name || 'La Parole Transmise - Lumières d\'Israël'
-            },
-            unit_amount: 3990
-          },
-          quantity: item.quantity || 1
-        };
-      }
-
-      return {
-        price: item.priceId,
-        quantity: item.quantity || 1
-      };
-    });
+    const lineItems = items.map(item => ({
+      price: item.priceId,
+      quantity: item.quantity || 1
+    }));
 
     const shippingMethod = body.shipping_method || 'colissimo';
 
