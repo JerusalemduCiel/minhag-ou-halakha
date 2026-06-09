@@ -1120,3 +1120,9 @@ img {
    FIN DU FICHIER
    ============================================================ */
 
+/* Réconciliation gabarit ↔ anciennes règles #hero-bis-moh (padding/height) */
+#hero-bis-moh.gabarit { padding: 60px 24px; height: auto; min-height: 100vh; }
+@media (max-width: 768px) {
+  #hero-bis-moh.gabarit { padding: 50px 18px; }
+}
+
