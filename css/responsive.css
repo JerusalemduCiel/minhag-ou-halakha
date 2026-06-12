@@ -1130,3 +1130,8 @@ img {
 #main-footer {
   background: linear-gradient(140deg, #3a161a 0%, #250d10 60%, #100b07 100%);
 }
+
+.btn-feuilleter{display:inline-flex;align-items:center;padding:.7em 1.4em;
+border:1px solid #c9a24b;border-radius:6px;background:transparent;color:#c9a24b;
+font:inherit;letter-spacing:.03em;cursor:pointer;transition:all .2s;}
+.btn-feuilleter:hover{background:#c9a24b;color:#fff;}
