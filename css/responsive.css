@@ -1126,3 +1126,7 @@ img {
   #hero-bis-moh.gabarit { padding: 50px 18px; }
 }
 
+/* === Footer assorti au fond du hero (MOH — bordeaux) === */
+#main-footer {
+  background: linear-gradient(140deg, #3a161a 0%, #250d10 60%, #100b07 100%);
+}
