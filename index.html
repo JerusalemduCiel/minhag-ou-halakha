@@ -340,7 +340,7 @@
           </dl>
           <div class="cta-row">
             <span class="prix">44,90 €</span>
-            <button type="button" class="btn-commander" data-action="store">Commander</button>
+            <button type="button" class="btn-commander" data-scroll-to="boutique" data-action="store">Commander</button>
           </div>
           <p class="reassurance">Paiement sécurisé · Collection Lumières d'Israël</p>
         </div>
@@ -807,22 +807,48 @@
         }
     }
 
-    document.addEventListener('click', function(e) {
-        const demoBtn = e.target.closest('[data-action="demo"]');
-        if (demoBtn) {
-            e.preventDefault();
-            window.open('https://minhagouhalakha.netlify.app', '_blank');
+    function scrollToSection(targetId) {
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) return;
+        const header = document.getElementById('main-header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        if (history.replaceState) {
+            history.replaceState(null, '', '#' + targetId);
         }
+    }
 
-        const storeBtn = e.target.closest('[data-action="store"]');
-        if (storeBtn) {
-            e.preventDefault();
-            if (storeBtn.disabled || storeBtn.getAttribute('aria-disabled') === 'true') {
-                return;
-            }
-            const target = document.getElementById('boutique');
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
-        }
+    function initSmoothScrolling() {
+        document.querySelectorAll('[data-scroll-to]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToSection(this.getAttribute('data-scroll-to'));
+            });
+        });
+    }
+
+    function initDataActionHandlers() {
+        document.querySelectorAll('[data-action="demo"]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open('https://minhagouhalakha.netlify.app', '_blank');
+            });
+        });
+
+        document.querySelectorAll('[data-action="store"]').forEach(function(el) {
+            if (el.hasAttribute('data-scroll-to')) return;
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (el.disabled || el.getAttribute('aria-disabled') === 'true') return;
+                scrollToSection('boutique');
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initSmoothScrolling();
+        initDataActionHandlers();
     });
     </script>
 
