@@ -1,6 +1,15 @@
 const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+const TRACKING_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1khrIVFybxVgrfBp6pzpEf_kwDCHklgwrc_sulpqe_lo/edit';
+
+function adminTrackingSheetLinkHtml() {
+  return '<div style="margin: 16px 0 24px; text-align: center; padding: 14px; background: #f9f5f0; border-radius: 8px; border-left: 4px solid #eda234;">' +
+    '<a href="' + TRACKING_SHEET_URL + '" style="color: #0f1419; font-weight: bold; font-size: 16px; text-decoration: underline;">' +
+    '📊 Ouvrir le tableau de suivi des précommandes</a>' +
+    '</div>';
+}
+
 async function sendEmail(to, subject, htmlContent) {
   const response = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
@@ -129,6 +138,7 @@ exports.handler = async (event) => {
         `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #eda234;">Nouvelle commande reçue !</h2>
+          ${adminTrackingSheetLinkHtml()}
           <table style="width: 100%; border-collapse: collapse;">
             <tr><td><strong>Nom :</strong></td><td>${customerName}</td></tr>
             <tr><td><strong>Email :</strong></td><td>${customerEmail}</td></tr>
